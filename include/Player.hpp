@@ -7,7 +7,7 @@ class Player {
     Vector2 dir;
     Vector2 lastDir;
 
-    Color colour; // TODO: swap for texture
+    Texture2D texture;
 
     float speed;
 
@@ -36,4 +36,5 @@ class Player {
 
     void Init();
     void Move();
+    void Draw();
 };

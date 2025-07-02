@@ -9,7 +9,7 @@ void Player::Init() {
     dir = {0, 0};
     lastDir = {0, 0};
 
-    colour = RAYWHITE;
+    texture = LoadTexture("../sprites/husk_one.png");
 
     speed = 50.0;
 
@@ -34,7 +34,7 @@ void Player::Init() {
     camera.target = pos;
     camera.offset = {1920 / 2.0f, 1080 / 2.0f}; // TODO: make 1920/1080 variable names
     camera.rotation = 0.0f;
-    camera.zoom = 1.0f;
+    camera.zoom = 2.0f;
 }
 
 void Player::Move() {
@@ -85,3 +85,5 @@ void Player::Move() {
 
     camera.target = Vector2Lerp(camera.target, pos, 20.0f * delta);
 }
+
+void Player::Draw() { DrawTextureV(texture, pos, RAYWHITE); }

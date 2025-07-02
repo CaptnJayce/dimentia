@@ -18,9 +18,8 @@ int main() {
         // Draw
         BeginDrawing();
         BeginMode2D(p.camera);
-        ClearBackground(BLACK);
-
-        DrawRectangle(p.pos.x, p.pos.y, p.width, p.height, p.colour);
+        ClearBackground({28, 36, 43, 255});
+        p.Draw();
 
         EndMode2D();
         EndDrawing();
