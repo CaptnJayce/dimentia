@@ -18,12 +18,16 @@ int main() {
     while (!WindowShouldClose()) {
         // Update
         p.Move();
+        p.Update(e);
+
         e.Move(p);
+        e.Update();
 
         // Draw
         BeginDrawing();
         BeginMode2D(p.camera);
         ClearBackground({28, 36, 43, 255});
+
         p.Draw();
         e.Draw();
 

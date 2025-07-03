@@ -1,11 +1,14 @@
 #pragma once
 #include <raylib.h>
 
+class Enemy;
+
 class Player {
   public:
     Vector2 pos;
     Vector2 dir;
     Vector2 lastDir;
+    Rectangle hitbox;
 
     Texture2D texture;
 
@@ -25,8 +28,10 @@ class Player {
 
     bool moving;
 
-    int width;
-    int height;
+    float width;
+    float height;
+
+    float health;
 
     // camera : may put in own header later
     Camera2D camera;
@@ -36,5 +41,6 @@ class Player {
 
     void Init();
     void Move();
+    void Update(const Enemy &enemy);
     void Draw();
 };

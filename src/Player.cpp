@@ -1,4 +1,6 @@
 #include "../include/Player.hpp"
+#include "../include/Enemy.hpp"
+#include "../include/Utils.hpp"
 #include <algorithm>
 #include <raylib.h>
 #include <raymath.h>
@@ -26,14 +28,18 @@ void Player::Init() {
     maxVelocity = 200.0;
     moving = false;
 
-    width = 15;
-    height = 30;
+    width = 12.0;
+    height = 26.0;
+
+    health = 50.0;
+
+    hitbox = {0, 0, width, height};
 
     // camera
     camera = {0};
     camera.target = pos;
-    camera.offset = {1920 / 2.0f, 1080 / 2.0f}; // TODO: make 1920/1080 variable names
-    camera.rotation = 0.0f;
+    camera.offset = {1920 / 2.0, 1080 / 2.0}; // TODO: make 1920/1080 variable names
+    camera.rotation = 0.0;
     camera.zoom = 2.0f;
 }
 
@@ -80,10 +86,24 @@ void Player::Move() {
         pos.x += lastDir.x * currentVelocity * delta;
         pos.y += lastDir.y * currentVelocity * delta;
 
+        hitbox.x = pos.x;
+        hitbox.y = pos.y;
+
         currentVelocity = std::min(currentVelocity, maxVelocity);
     }
 
     camera.target = Vector2Lerp(camera.target, pos, 20.0f * delta);
 }
 
-void Player::Draw() { DrawTextureV(texture, pos, RAYWHITE); }
+void Player::Update(const Enemy &enemy) {
+    bool isColliding = Collision::CheckRectangles(hitbox, enemy.hitbox);
+    if (isColliding) {
+        std::cout << "you're better than this";
+    }
+}
+
+void Player::Draw() {
+    // DrawRectangleLinesEx(hitbox, 1.0f, RED);
+    Rectangle rect = {0, 0, (float)texture.width, (float)texture.height};
+    DrawTextureRec(texture, rect, pos, WHITE);
+}
