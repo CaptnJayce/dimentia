@@ -12,6 +12,7 @@ FetchContent_MakeAvailable(raylib)
 add_executable(KalpaChaos 
     src/Main.cpp
     src/Player.cpp
+    src/Enemy.cpp
 )
 
 target_link_libraries(KalpaChaos PRIVATE raylib)

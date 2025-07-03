@@ -1,3 +1,4 @@
+#include "../include/Enemy.hpp"
 #include "../include/Player.hpp"
 #include <raylib.h>
 
@@ -9,17 +10,22 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Kalpa: Chaos");
 
     Player p;
+    Enemy e;
+
     p.Init();
+    e.Init();
 
     while (!WindowShouldClose()) {
         // Update
         p.Move();
+        e.Move();
 
         // Draw
         BeginDrawing();
         BeginMode2D(p.camera);
         ClearBackground({28, 36, 43, 255});
         p.Draw();
+        e.Draw();
 
         EndMode2D();
         EndDrawing();
