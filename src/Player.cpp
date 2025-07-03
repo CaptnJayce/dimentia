@@ -11,9 +11,9 @@ void Player::Init() {
 
     texture = LoadTexture("../sprites/husk_one.png");
 
-    speed = 50.0;
+    speed = 10.0;
 
-    dashSpeed = 1500.0;
+    dashSpeed = 600.0;
     dashDur = 0.2;
     dashCooldown = 1.0;
     dashTimer = 0.0;
@@ -23,7 +23,7 @@ void Player::Init() {
 
     velocity = 200.0;
     currentVelocity = 0.0;
-    maxVelocity = 600.0;
+    maxVelocity = 200.0;
     moving = false;
 
     width = 15;
