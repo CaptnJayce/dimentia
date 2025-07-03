@@ -1,12 +1,13 @@
 #pragma once
+#include "./Player.hpp"
 #include <raylib.h>
 
 class Enemy {
   public:
     Vector2 pos;
+    Vector2 dir;
 
-    Color colour; // TODO: replace with texture
-    // Texture2D texture;
+    Texture2D texture;
 
     float speed;
 
@@ -14,6 +15,6 @@ class Enemy {
     int height;
 
     void Init();
-    void Move();
+    void Move(const Player &player);
     void Draw();
 };

@@ -18,7 +18,7 @@ int main() {
     while (!WindowShouldClose()) {
         // Update
         p.Move();
-        e.Move();
+        e.Move(p);
 
         // Draw
         BeginDrawing();
