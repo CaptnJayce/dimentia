@@ -11,6 +11,7 @@ void Player::Init() {
     pos = {100, 100};
     dir = {0, 0};
     lastDir = {0, 0};
+    cursorPos = {0, 0};
 
     texture = LoadTexture("../sprites/husk_one.png");
 
@@ -105,6 +106,8 @@ void Player::Move() {
 }
 
 void Player::Attack(const std::vector<Enemy> &enemies) {
+    attackReady = false;
+
     for (const auto &enemy : enemies) {
         if (CheckCollisionRecs(attackHitbox, enemy.hitbox)) {
             // TODO: remove enemy health && add iframes to enemies
@@ -113,6 +116,8 @@ void Player::Attack(const std::vector<Enemy> &enemies) {
 }
 
 void Player::Update(const std::vector<Enemy> &enemies) {
+    cursorPos = GetScreenToWorld2D(GetMousePosition(), camera);
+
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         Attack(enemies);
     }
@@ -127,6 +132,8 @@ void Player::Update(const std::vector<Enemy> &enemies) {
 }
 
 void Player::Draw() {
+    DrawCircleV(cursorPos, 10.0f, RED);
+
     DrawRectangleLinesEx(attackHitbox, 1.0f, RED);
     if (!attackReady) {
         DrawTextureRec(attackTexture, attackHitbox, pos, WHITE);

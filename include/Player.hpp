@@ -17,6 +17,8 @@ class Player {
 
     float friction;
 
+    Vector2 cursorPos;
+
     float damage;
     float attackSpeed;
     float attackCooldown;
