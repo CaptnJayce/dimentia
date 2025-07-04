@@ -20,12 +20,12 @@ class Player {
     Vector2 cursorPos;
 
     float damage;
-    float attackSpeed;
-    float attackCooldown;
-    float attackDuration;
-    bool attackReady;
-    Texture2D attackTexture;
-    Rectangle attackHitbox;
+    float atkSpeed;
+    float atkCooldown;
+    float atkDuration;
+    bool atkReady;
+    Texture2D atkTexture;
+    Rectangle atkHitbox;
 
     float dashSpeed;
     float dashDur;
