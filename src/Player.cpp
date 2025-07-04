@@ -23,6 +23,7 @@ void Player::Init() {
     atkReady = true;
     atkTexture = LoadTexture("../sprites/crescent_slash.png");
     atkHitbox = {0, 0, 4, 16};
+    knockback = 1000.0;
 
     dashSpeed = 600.0;
     dashDur = 0.2;
@@ -104,22 +105,20 @@ void Player::Move() {
     camera.target = Vector2Lerp(camera.target, pos, 20.0f * delta);
 }
 
-void Player::Attack(const std::vector<Enemy> &enemies) {
+void Player::Attack(std::vector<Enemy> &enemies) {
     atkReady = false;
 
-    for (const auto &enemy : enemies) {
+    for (auto &enemy : enemies) {
         if (CheckCollisionRecs(atkHitbox, enemy.hitbox)) {
-            // TODO: remove enemy health && add iframes to enemies
+            enemy.Knockback(pos, knockback);
         }
     }
 }
 
-void Player::Update(const std::vector<Enemy> &enemies) {
+void Player::Update(std::vector<Enemy> &enemies) {
     cursorPos = GetScreenToWorld2D(GetMousePosition(), camera);
 
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        Attack(enemies);
-    }
+    Attack(enemies);
 
     for (const auto &enemy : enemies) {
         bool isColliding = Utils::CheckRectangles(hitbox, enemy.hitbox);

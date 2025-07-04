@@ -23,6 +23,7 @@ class Player {
     float atkSpeed;
     float atkCooldown;
     float atkDuration;
+    float knockback;
     bool atkReady;
     Texture2D atkTexture;
     Rectangle atkHitbox;
@@ -54,9 +55,9 @@ class Player {
 
     // actions
     void Move();
-    void Attack(const std::vector<Enemy> &enemies);
+    void Attack(std::vector<Enemy> &enemies);
 
     // rendering stuff
-    void Update(const std::vector<Enemy> &enemies);
+    void Update(std::vector<Enemy> &enemies);
     void Draw();
 };

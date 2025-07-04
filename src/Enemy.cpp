@@ -18,6 +18,10 @@ void Enemy::Init() {
     hitbox = {0, 0, width, height};
 
     health = 10.0;
+
+    velocity = {0, 0};
+    knockbackVelocity = {0, 0};
+    knockbackResistance = 0.0;
 }
 
 void Enemy::Move(const Player &player) {
@@ -32,7 +36,28 @@ void Enemy::Move(const Player &player) {
     hitbox.y = pos.y;
 }
 
-void Enemy::Update() {}
+void Enemy::Knockback(Vector2 source, float knockback) {
+    Vector2 direction = Vector2Subtract(pos, source);
+    if (Vector2Length(direction) > 0) {
+        direction = Vector2Normalize(direction);
+    }
+
+    knockbackVelocity = Vector2Scale(direction, knockback);
+}
+
+void Enemy::Update() {
+    float delta = GetFrameTime();
+
+    if (Vector2Length(knockbackVelocity) > 0.1f) {
+        pos = Vector2Add(pos, Vector2Scale(knockbackVelocity, delta));
+        knockbackVelocity = Vector2Lerp(knockbackVelocity, Vector2Zero(), 5.0f * delta);
+    } else {
+        knockbackVelocity = Vector2Zero();
+    }
+
+    hitbox.x = pos.x;
+    hitbox.y = pos.y;
+}
 
 void Enemy::Draw() {
     DrawRectangleLinesEx(hitbox, 1.0f, RED);
