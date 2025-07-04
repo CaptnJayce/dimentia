@@ -1,10 +1,15 @@
 #pragma once
 #include <raylib.h>
+#include <vector>
 
-namespace Collision {
-inline bool CheckRectangles(const Rectangle &rect1, const Rectangle &rect2) {
-    bool isColliding = CheckCollisionRecs(rect1, rect2);
-    return isColliding;
+// TODO: projectile vector
+
+class Enemy;
+
+namespace Utils {
+    inline bool CheckRectangles(const Rectangle &rect1, const Rectangle &rect2) {
+        return CheckCollisionRecs(rect1, rect2);
+    }
+
+    inline std::vector<Enemy> enemies;
 }
-} // namespace Collision
-// THE ABOVE COMMENT WONT GO AWAY I HAVE NO IDEA WHY

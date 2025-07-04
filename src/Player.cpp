@@ -2,6 +2,7 @@
 #include "../include/Enemy.hpp"
 #include "../include/Utils.hpp"
 #include <algorithm>
+#include <iostream>
 #include <raylib.h>
 #include <raymath.h>
 
@@ -14,6 +15,14 @@ void Player::Init() {
     texture = LoadTexture("../sprites/husk_one.png");
 
     speed = 10.0;
+
+    damage = 5.0;
+    attackSpeed = 100.0;
+    attackCooldown = 1.0; // once a second
+    attackDuration = 0.5;
+    attackReady = true;
+    attackTexture = LoadTexture("../sprites/crescent_slash.png");
+    attackHitbox = {0, 0, 4, 16};
 
     dashSpeed = 600.0;
     dashDur = 0.2;
@@ -95,14 +104,36 @@ void Player::Move() {
     camera.target = Vector2Lerp(camera.target, pos, 20.0f * delta);
 }
 
-void Player::Update(const Enemy &enemy) {
-    bool isColliding = Collision::CheckRectangles(hitbox, enemy.hitbox);
-    if (isColliding) {
-        std::cout << "you're better than this";
+void Player::Attack(const std::vector<Enemy> &enemies) {
+    for (const auto &enemy : enemies) {
+        if (CheckCollisionRecs(attackHitbox, enemy.hitbox)) {
+            // TODO: remove enemy health && add iframes to enemies
+        }
+    }
+}
+
+void Player::Update(const std::vector<Enemy> &enemies) {
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        Attack(enemies);
+    }
+
+    for (const auto &enemy : enemies) {
+        bool isColliding = Utils::CheckRectangles(hitbox, enemy.hitbox);
+        if (isColliding) {
+            // TODO: remove player health && add iframes
+            break;
+        }
     }
 }
 
 void Player::Draw() {
+    DrawRectangleLinesEx(attackHitbox, 1.0f, RED);
+    if (!attackReady) {
+        DrawTextureRec(attackTexture, attackHitbox, pos, WHITE);
+    }
+
+    std::cout << health << std::endl;
+
     // DrawRectangleLinesEx(hitbox, 1.0f, RED);
     Rectangle rect = {0, 0, (float)texture.width, (float)texture.height};
     DrawTextureRec(texture, rect, pos, WHITE);

@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include <vector>
 
 class Enemy;
 
@@ -15,6 +16,14 @@ class Player {
     float speed;
 
     float friction;
+
+    float damage;
+    float attackSpeed;
+    float attackCooldown;
+    float attackDuration;
+    bool attackReady;
+    Texture2D attackTexture;
+    Rectangle attackHitbox;
 
     float dashSpeed;
     float dashDur;
@@ -40,7 +49,12 @@ class Player {
     Vector2 target;
 
     void Init();
+
+    // actions
     void Move();
-    void Update(const Enemy &enemy);
+    void Attack(const std::vector<Enemy> &enemies);
+
+    // rendering stuff
+    void Update(const std::vector<Enemy> &enemies);
     void Draw();
 };

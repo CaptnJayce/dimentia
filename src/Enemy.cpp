@@ -35,7 +35,7 @@ void Enemy::Move(const Player &player) {
 void Enemy::Update() {}
 
 void Enemy::Draw() {
-    // Rectangle rect = {0, 0, (float)texture.width, (float)texture.height};
+    DrawRectangleLinesEx(hitbox, 1.0f, RED);
 
     Rectangle rect = {0, 0, (float)texture.width, (float)texture.height};
     DrawTextureRec(texture, rect, pos, RAYWHITE);
