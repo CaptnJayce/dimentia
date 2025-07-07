@@ -23,6 +23,8 @@ class Player {
     float atkSpeed;
     float atkCooldown;
     float atkDuration;
+    float atkActiveTimer;
+    float atkCooldownTimer;
     float knockback;
     bool atkReady;
     Texture2D atkTexture;

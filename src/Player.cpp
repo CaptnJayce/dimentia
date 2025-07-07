@@ -18,12 +18,14 @@ void Player::Init() {
 
     damage = 5.0;
     atkSpeed = 100.0;
-    atkCooldown = 1.0; // once a second
+    atkCooldown = 0.5;
     atkDuration = 0.5;
+    atkActiveTimer = 0.0;
+    atkCooldownTimer = 0.0;
     atkReady = true;
     atkTexture = LoadTexture("../sprites/crescent_slash.png");
     atkHitbox = {0, 0, 4, 16};
-    knockback = 1000.0;
+    knockback = 500.0;
 
     dashSpeed = 600.0;
     dashDur = 0.2;
@@ -106,24 +108,39 @@ void Player::Move() {
 }
 
 void Player::Attack(std::vector<Enemy> &enemies) {
-    atkReady = false;
-
-    for (auto &enemy : enemies) {
-        if (CheckCollisionRecs(atkHitbox, enemy.hitbox)) {
-            enemy.Knockback(pos, knockback);
+    if (atkActiveTimer > 0.0f) {
+        for (auto &enemy : enemies) {
+            if (CheckCollisionRecs(atkHitbox, enemy.hitbox)) {
+                enemy.Knockback(pos, knockback);
+            }
         }
     }
 }
 
 void Player::Update(std::vector<Enemy> &enemies) {
+    float delta = GetFrameTime();
+
     cursorPos = GetScreenToWorld2D(GetMousePosition(), camera);
+
+    atkActiveTimer -= delta;
+    atkCooldownTimer -= delta;
+
+    if (atkCooldownTimer <= 0.0f) {
+        atkReady = true;
+    }
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && atkReady) {
+        atkActiveTimer = atkDuration;
+        atkCooldownTimer = atkDuration + atkCooldown;
+        atkReady = false;
+    }
 
     Attack(enemies);
 
     for (const auto &enemy : enemies) {
         bool isColliding = Utils::CheckRectangles(hitbox, enemy.hitbox);
         if (isColliding) {
-            // TODO: remove player health && add iframes
+            // TODO: remove player health & add iframes
             break;
         }
     }
@@ -131,7 +148,7 @@ void Player::Update(std::vector<Enemy> &enemies) {
 
 void Player::Draw() {
     // cursor
-    DrawCircleV(cursorPos, 10.0f, RED);
+    DrawCircleV(cursorPos, 5.0f, RED);
 
     Vector2 direction = Vector2Subtract(cursorPos, pos);
     float distance = Vector2Length(direction);
@@ -146,18 +163,18 @@ void Player::Draw() {
     Vector2 normalized = Vector2Normalize(direction);
     atkPosition = Vector2Add(playerCenter, Vector2Scale(normalized, maxRadius));
 
-    if (!atkReady) {
+    if (atkActiveTimer > 0.0f) {
         atkHitbox.width = (float)atkTexture.width;
         atkHitbox.height = (float)atkTexture.height;
 
         Vector2 txtOrigin = {atkHitbox.width / 2, atkHitbox.height / 2};
 
+        Rectangle rotHitbox = {atkPosition.x, atkPosition.y, atkHitbox.width, atkHitbox.height};
+        DrawRectanglePro(rotHitbox, txtOrigin, rotation, RED);
+
         Rectangle destRec = {atkPosition.x, atkPosition.y, (float)atkTexture.width, (float)atkTexture.height};
         DrawTexturePro(atkTexture, Rectangle{0, 0, (float)atkTexture.width, (float)atkTexture.height}, destRec,
                        txtOrigin, rotation, WHITE);
-
-        Rectangle rotHitbox = {atkPosition.x, atkPosition.y, atkHitbox.width, atkHitbox.height};
-        // DrawRectanglePro(rotHitbox, txtOrigin, rotation, RED);
 
         atkHitbox = rotHitbox;
     }
