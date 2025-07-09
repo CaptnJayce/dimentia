@@ -12,6 +12,12 @@ class Player {
     Rectangle hitbox;
 
     Texture2D texture;
+    int frameDelay;
+    int frameCounter;
+    int animFrames;
+    int currentAnimFrame;
+    int frameWidth;
+    int frameHeight;
 
     float speed;
 

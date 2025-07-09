@@ -12,7 +12,15 @@ void Player::Init() {
     lastDir = {0, 0};
     cursorPos = {0, 0};
 
-    texture = LoadTexture("../sprites/husk_one.png");
+    animFrames = 19;
+    frameCounter = 0;
+    frameDelay = 8;
+    currentAnimFrame = 0;
+
+    texture = LoadTexture("../sprites/husk_one_spritesheet.png");
+
+    frameWidth = texture.width / animFrames;
+    frameHeight = texture.height;
 
     speed = 10.0;
 
@@ -32,27 +40,23 @@ void Player::Init() {
     dashCooldown = 1.0;
     dashTimer = 0.0;
     dashReady = true;
-
     friction = 4000.0;
-
     velocity = 200.0;
     currentVelocity = 0.0;
     maxVelocity = 200.0;
     moving = false;
 
-    width = 12.0;
-    height = 26.0;
-
+    width = frameWidth;
+    height = frameHeight;
     health = 50.0;
 
-    hitbox = {0, 0, width, height};
+    hitbox = {pos.x, pos.y, width, height};
 
-    // camera
     camera = {0};
     camera.target = pos;
-    camera.offset = {1920 / 2.0, 1080 / 2.0}; // TODO: make 1920/1080 variable names
+    camera.offset = {1920 / 2.0, 1080 / 2.0};
     camera.rotation = 0.0;
-    camera.zoom = 2.0f;
+    camera.zoom = 4.0f;
 }
 
 void Player::Move() {
@@ -120,6 +124,15 @@ void Player::Attack(std::vector<Enemy> &enemies) {
 void Player::Update(std::vector<Enemy> &enemies) {
     float delta = GetFrameTime();
 
+    frameCounter++;
+    if (frameCounter >= frameDelay) {
+        currentAnimFrame++;
+        if (currentAnimFrame >= animFrames) {
+            currentAnimFrame = 0;
+        }
+        frameCounter = 0;
+    }
+
     cursorPos = GetScreenToWorld2D(GetMousePosition(), camera);
 
     atkActiveTimer -= delta;
@@ -151,10 +164,9 @@ void Player::Draw() {
     DrawCircleV(cursorPos, 5.0f, RED);
 
     Vector2 direction = Vector2Subtract(cursorPos, pos);
-    float distance = Vector2Length(direction);
     float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
 
-    Vector2 playerCenter = {pos.x + texture.width / 2.0f, pos.y + texture.height / 2.0f};
+    Vector2 playerCenter = {pos.x + frameWidth / 2.0f, pos.y + frameHeight / 2.0f};
 
     // atk
     const float maxRadius = 30.0f;
@@ -179,6 +191,12 @@ void Player::Draw() {
         atkHitbox = rotHitbox;
     }
 
-    // player
-    DrawTextureRec(texture, Rectangle{0, 0, (float)texture.width, (float)texture.height}, pos, WHITE);
+    Rectangle sourceRec = {(float)currentAnimFrame * frameWidth, 0, (float)frameWidth, (float)frameHeight};
+
+    bool flipSprite = (lastDir.x < 0);
+    if (flipSprite) {
+        sourceRec.width = -frameWidth;
+    }
+
+    DrawTextureRec(texture, sourceRec, pos, WHITE);
 }

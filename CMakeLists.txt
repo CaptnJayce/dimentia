@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10..4.0)
-project(KalpaChaos CXX)
+project(Dimentia CXX)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -9,10 +9,10 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(raylib)
-add_executable(KalpaChaos 
+add_executable(Dimentia
     src/Main.cpp
     src/Player.cpp
     src/Enemy.cpp
 )
 
-target_link_libraries(KalpaChaos PRIVATE raylib)
+target_link_libraries(Dimentia PRIVATE raylib)

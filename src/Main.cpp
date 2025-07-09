@@ -16,12 +16,14 @@ int main() {
     std::vector<Enemy> enemies;
 
     // TODO: replace with actual spawning logic
+    /*
     for (int i = 0; i < 5; i++) {
         Enemy e;
         e.Init();
         e.pos = {static_cast<float>(300 + i * 200), static_cast<float>(200 + i * 100)};
         enemies.push_back(e);
     }
+    */
 
     while (!WindowShouldClose()) {
         float delta = GetFrameTime();
@@ -38,7 +40,7 @@ int main() {
         // Draw
         BeginDrawing();
         BeginMode2D(p.camera);
-        ClearBackground({28, 36, 43, 255});
+        ClearBackground({25, 23, 36, 255});
 
         p.Draw();
 
