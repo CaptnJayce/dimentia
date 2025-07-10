@@ -11,7 +11,10 @@ class Player {
     Vector2 lastDir;
     Rectangle hitbox;
 
-    Texture2D texture;
+    Texture2D idle;
+    Texture2D run;
+    Texture2D currentAnim;
+
     int frameDelay;
     int frameCounter;
     int animFrames;

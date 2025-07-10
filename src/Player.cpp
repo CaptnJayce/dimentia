@@ -12,15 +12,21 @@ void Player::Init() {
     lastDir = {0, 0};
     cursorPos = {0, 0};
 
-    animFrames = 19;
+    // TODO:
+    // move all anim related code into own files
+    // create state machine (woohoo)
+    // set animFrames and currentAnim with state machine
+    animFrames = 6; // number of frames in spritesheet
     frameCounter = 0;
     frameDelay = 8;
     currentAnimFrame = 0;
 
-    texture = LoadTexture("../sprites/husk_one_spritesheet.png");
+    idle = LoadTexture("../sprites/s_HuskOneIdle.png");
+    run = LoadTexture("../sprites/s_HuskOneRun.png");
+    currentAnim = run;
 
-    frameWidth = texture.width / animFrames;
-    frameHeight = texture.height;
+    frameWidth = currentAnim.width / animFrames;
+    frameHeight = currentAnim.height;
 
     speed = 10.0;
 
@@ -198,5 +204,5 @@ void Player::Draw() {
         sourceRec.width = -frameWidth;
     }
 
-    DrawTextureRec(texture, sourceRec, pos, WHITE);
+    DrawTextureRec(currentAnim, sourceRec, pos, WHITE);
 }
