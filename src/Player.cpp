@@ -1,4 +1,5 @@
 #include "../include/Player.hpp"
+#include "../include/AnimationManager.hpp"
 #include "../include/Enemy.hpp"
 #include "../include/Utils.hpp"
 #include <algorithm>
@@ -6,27 +7,16 @@
 #include <raymath.h>
 
 void Player::Init() {
+    // TODO: move anims into own Init function
+    animManager.AddAnimation(AnimState::IDLE, "../sprites/s_HuskOneIdle.png", 19, 0.1, true);
+    animManager.AddAnimation(AnimState::RUN, "../sprites/s_HuskOneRun.png", 6, 0.1, true);
+    currentAnimState = AnimState::IDLE;
+
     // player
     pos = {100, 100};
     dir = {0, 0};
     lastDir = {0, 0};
     cursorPos = {0, 0};
-
-    // TODO:
-    // move all anim related code into own files
-    // create state machine (woohoo)
-    // set animFrames and currentAnim with state machine
-    animFrames = 6; // number of frames in spritesheet
-    frameCounter = 0;
-    frameDelay = 8;
-    currentAnimFrame = 0;
-
-    idle = LoadTexture("../sprites/s_HuskOneIdle.png");
-    run = LoadTexture("../sprites/s_HuskOneRun.png");
-    currentAnim = run;
-
-    frameWidth = currentAnim.width / animFrames;
-    frameHeight = currentAnim.height;
 
     speed = 10.0;
 
@@ -99,10 +89,12 @@ void Player::Move() {
             lastDir = dir;
             currentVelocity += speed * velocity * delta;
             currentVelocity = std::min(currentVelocity, maxVelocity);
+            ChangeAnimation(AnimState::RUN);
         } else {
             moving = false;
             currentVelocity -= friction * delta;
             currentVelocity = std::max(0.0f, currentVelocity);
+            ChangeAnimation(AnimState::IDLE);
         }
 
         pos.x += lastDir.x * currentVelocity * delta;
@@ -129,15 +121,7 @@ void Player::Attack(std::vector<Enemy> &enemies) {
 
 void Player::Update(std::vector<Enemy> &enemies) {
     float delta = GetFrameTime();
-
-    frameCounter++;
-    if (frameCounter >= frameDelay) {
-        currentAnimFrame++;
-        if (currentAnimFrame >= animFrames) {
-            currentAnimFrame = 0;
-        }
-        frameCounter = 0;
-    }
+    animManager.Update();
 
     cursorPos = GetScreenToWorld2D(GetMousePosition(), camera);
 
@@ -197,12 +181,13 @@ void Player::Draw() {
         atkHitbox = rotHitbox;
     }
 
-    Rectangle sourceRec = {(float)currentAnimFrame * frameWidth, 0, (float)frameWidth, (float)frameHeight};
-
     bool flipSprite = (lastDir.x < 0);
-    if (flipSprite) {
-        sourceRec.width = -frameWidth;
-    }
+    animManager.Draw(pos, flipSprite);
+}
 
-    DrawTextureRec(currentAnim, sourceRec, pos, WHITE);
+void Player::ChangeAnimation(AnimState newState) {
+    if (currentAnimState != newState) {
+        currentAnimState = newState;
+        animManager.Play(newState);
+    }
 }

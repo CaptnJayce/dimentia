@@ -43,8 +43,6 @@ int main() {
         ClearBackground({25, 23, 36, 255});
 
         p.Draw();
-
-        // Draw
         for (auto &enemy : enemies) {
             enemy.Draw();
         }

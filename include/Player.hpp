@@ -1,4 +1,5 @@
 #pragma once
+#include "../include/AnimationManager.hpp"
 #include <raylib.h>
 #include <vector>
 
@@ -6,6 +7,14 @@ class Enemy;
 
 class Player {
   public:
+    void Init();
+    void ChangeAnimation(AnimState newState);
+    void Move();
+    void Attack(std::vector<Enemy> &enemies);
+    void Update(std::vector<Enemy> &enemies);
+    void Draw();
+
+    // TODO should probably make these private at some point
     Vector2 pos;
     Vector2 dir;
     Vector2 lastDir;
@@ -23,9 +32,7 @@ class Player {
     int frameHeight;
 
     float speed;
-
     float friction;
-
     Vector2 cursorPos;
 
     float damage;
@@ -48,27 +55,17 @@ class Player {
     float velocity;
     float currentVelocity;
     float maxVelocity;
-
     bool moving;
 
     float width;
     float height;
-
     float health;
 
-    // camera : may put in own header later
     Camera2D camera;
     float zoom;
     float offset;
     Vector2 target;
 
-    void Init();
-
-    // actions
-    void Move();
-    void Attack(std::vector<Enemy> &enemies);
-
-    // rendering stuff
-    void Update(std::vector<Enemy> &enemies);
-    void Draw();
+    AnimationManager animManager;
+    AnimState currentAnimState;
 };
