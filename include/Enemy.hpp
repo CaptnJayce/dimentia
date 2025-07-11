@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include <vector>
 
 class Player;
 
@@ -25,9 +26,16 @@ class Enemy {
 
     float health;
 
+    float iframes;
+    float iframeTimer;
+    bool iframesReady;
+
     void Init();
     void Move(const Player &player);
     void Update();
+    void Receive(Vector2 source, Rectangle damageSource, float force, float damage);
+    void Die();
     void Draw();
-    void Knockback(Vector2 source, float force);
 };
+
+extern std::vector<Enemy> enemies;

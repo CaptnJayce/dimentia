@@ -2,8 +2,6 @@
 #include "../include/AnimationManager.hpp"
 #include "../include/Enemy.hpp"
 #include <algorithm>
-#include <iostream>
-#include <ostream>
 #include <raylib.h>
 #include <raymath.h>
 
@@ -115,12 +113,22 @@ void Player::Move() {
 }
 
 void Player::Attack(std::vector<Enemy> &enemies) {
-    if (atkActiveTimer > 0.0f) {
-        for (Enemy &enemy : enemies) {
-            if (CheckCollisionRecs(atkHitbox, enemy.hitbox)) {
-                enemy.Knockback(pos, knockback);
+    if (atkActiveTimer <= 0.0f) {
+        return;
+    }
+
+    for (int i = 0; i < enemies.size();) {
+        Enemy &enemy = enemies[i];
+
+        if (CheckCollisionRecs(atkHitbox, enemy.hitbox)) {
+            enemy.Receive(pos, atkHitbox, knockback, damage);
+
+            if (enemy.health <= 0) {
+                enemies.erase(enemies.begin() + i);
+                continue;
             }
         }
+        i++;
     }
 }
 

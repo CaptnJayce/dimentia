@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+std::vector<Enemy> enemies;
+
 void Enemy::Init() {
     // TODO: hitbox
     pos = {200, 200};
@@ -19,6 +21,10 @@ void Enemy::Init() {
 
     damage = 10.0;
     health = 10.0;
+
+    iframes = 1.0; // invuln for 1 second
+    iframeTimer = iframes;
+    iframesReady = true;
 
     velocity = {0, 0};
     knockbackVelocity = {0, 0};
@@ -37,17 +43,42 @@ void Enemy::Move(const Player &player) {
     hitbox.y = pos.y;
 }
 
-void Enemy::Knockback(Vector2 source, float knockback) {
-    Vector2 direction = Vector2Subtract(pos, source);
+void Enemy::Receive(Vector2 source, Rectangle damageSource, float knockback, float damage) {
+    Vector2 enemyCenter = {hitbox.x + hitbox.width / 2, hitbox.y + hitbox.height / 2};
+
+    Vector2 direction = Vector2Subtract(enemyCenter, source);
     if (Vector2Length(direction) > 0) {
         direction = Vector2Normalize(direction);
     }
 
-    knockbackVelocity = Vector2Scale(direction, knockback);
+    if (iframesReady) {
+        knockbackVelocity = Vector2Scale(direction, knockback);
+        health -= damage;
+        iframesReady = false;
+        iframeTimer = iframes;
+    }
+}
+
+void Enemy::Die() {
+    for (auto it = enemies.begin(); it != enemies.end();) {
+        if ((*it).health <= 0) {
+            UnloadTexture((*it).texture);
+            it = enemies.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
 void Enemy::Update() {
     float delta = GetFrameTime();
+
+    if (!iframesReady) {
+        iframeTimer -= delta;
+        if (iframeTimer <= 0.0f) {
+            iframesReady = true;
+        }
+    }
 
     if (Vector2Length(knockbackVelocity) > 0.1f) {
         pos = Vector2Add(pos, Vector2Scale(knockbackVelocity, delta));
