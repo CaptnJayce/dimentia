@@ -1,7 +1,6 @@
 #include "../include/Player.hpp"
 #include "../include/AnimationManager.hpp"
 #include "../include/Enemy.hpp"
-#include "../include/Utils.hpp"
 #include <algorithm>
 #include <iostream>
 #include <ostream>
@@ -169,17 +168,6 @@ void Player::Update(std::vector<Enemy> &enemies) {
 
     Attack(enemies);
     Receive(enemies);
-    std::cout << health << std::endl;
-    std::cout << width << std::endl;
-    std::cout << height << std::endl;
-
-    for (const Enemy &enemy : enemies) {
-        bool isColliding = Utils::CheckRectangles(hitbox, enemy.hitbox);
-        if (isColliding) {
-            // TODO: remove player health & add iframes
-            break;
-        }
-    }
 }
 
 void Player::Draw() {
