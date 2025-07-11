@@ -3,6 +3,7 @@
 
 class Player;
 
+// TODO: make it so enemies dont overlap with each other
 class Enemy {
   public:
     Vector2 pos;
@@ -13,6 +14,9 @@ class Enemy {
 
     Texture2D texture;
 
+    float damage;
+
+    // TODO: give enemies slightly random speed
     float speed;
     float knockbackResistance;
 

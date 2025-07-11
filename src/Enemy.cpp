@@ -17,6 +17,7 @@ void Enemy::Init() {
 
     hitbox = {0, 0, width, height};
 
+    damage = 10.0;
     health = 10.0;
 
     velocity = {0, 0};

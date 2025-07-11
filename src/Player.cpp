@@ -3,6 +3,8 @@
 #include "../include/Enemy.hpp"
 #include "../include/Utils.hpp"
 #include <algorithm>
+#include <iostream>
+#include <ostream>
 #include <raylib.h>
 #include <raymath.h>
 
@@ -42,9 +44,13 @@ void Player::Init() {
     maxVelocity = 200.0;
     moving = false;
 
-    width = frameWidth;
-    height = frameHeight;
-    health = 50.0;
+    iframes = 1.0; // invuln for 1 second
+    iframeTimer = iframes;
+    iframesReady = true;
+    health = 100.0;
+
+    width = 10;
+    height = 22;
 
     hitbox = {pos.x, pos.y, width, height};
 
@@ -111,9 +117,32 @@ void Player::Move() {
 
 void Player::Attack(std::vector<Enemy> &enemies) {
     if (atkActiveTimer > 0.0f) {
-        for (auto &enemy : enemies) {
+        for (Enemy &enemy : enemies) {
             if (CheckCollisionRecs(atkHitbox, enemy.hitbox)) {
                 enemy.Knockback(pos, knockback);
+            }
+        }
+    }
+}
+
+void Player::Receive(std::vector<Enemy> &enemies) {
+    float delta = GetFrameTime();
+
+    if (!iframesReady) {
+        iframeTimer -= delta;
+
+        if (iframeTimer <= 0.0f) {
+            iframesReady = true;
+        }
+    }
+
+    if (iframesReady) {
+        for (Enemy &enemy : enemies) {
+            if (CheckCollisionRecs(hitbox, enemy.hitbox)) {
+                health -= enemy.damage;
+                iframesReady = false;
+                iframeTimer = iframes;
+                break;
             }
         }
     }
@@ -139,8 +168,12 @@ void Player::Update(std::vector<Enemy> &enemies) {
     }
 
     Attack(enemies);
+    Receive(enemies);
+    std::cout << health << std::endl;
+    std::cout << width << std::endl;
+    std::cout << height << std::endl;
 
-    for (const auto &enemy : enemies) {
+    for (const Enemy &enemy : enemies) {
         bool isColliding = Utils::CheckRectangles(hitbox, enemy.hitbox);
         if (isColliding) {
             // TODO: remove player health & add iframes
@@ -156,7 +189,7 @@ void Player::Draw() {
     Vector2 direction = Vector2Subtract(cursorPos, pos);
     float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
 
-    Vector2 playerCenter = {pos.x + frameWidth / 2.0f, pos.y + frameHeight / 2.0f};
+    Vector2 playerCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
 
     // atk
     const float maxRadius = 30.0f;

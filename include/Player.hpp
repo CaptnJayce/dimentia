@@ -11,6 +11,7 @@ class Player {
     void ChangeAnimation(AnimState newState);
     void Move();
     void Attack(std::vector<Enemy> &enemies);
+    void Receive(std::vector<Enemy> &enemies);
     void Update(std::vector<Enemy> &enemies);
     void Draw();
 
@@ -60,6 +61,9 @@ class Player {
     float width;
     float height;
     float health;
+    float iframes;
+    float iframeTimer;
+    bool iframesReady;
 
     Camera2D camera;
     float zoom;
