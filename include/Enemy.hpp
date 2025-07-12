@@ -1,4 +1,5 @@
 #pragma once
+#include "./Globals.hpp"
 #include <raylib.h>
 #include <vector>
 
@@ -9,7 +10,8 @@ class Enemy {
   public:
     Vector2 pos;
     Vector2 dir;
-    Rectangle hitbox;
+    float radius;
+    Circle hitCircle;
     Vector2 velocity;
     Vector2 knockbackVelocity;
 
@@ -33,7 +35,7 @@ class Enemy {
     void Init();
     void Move(const Player &player);
     void Update();
-    void Receive(Vector2 source, Rectangle damageSource, float force, float damage);
+    void Receive(Vector2 source, Circle damageSource, float force, float damage);
     void Die();
     void Draw();
 };

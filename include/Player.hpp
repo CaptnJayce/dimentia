@@ -1,5 +1,7 @@
 #pragma once
-#include "../include/AnimationManager.hpp"
+#include "./AnimationManager.hpp"
+#include "./Globals.hpp"
+
 #include <raylib.h>
 #include <vector>
 
@@ -19,7 +21,7 @@ class Player {
     Vector2 pos;
     Vector2 dir;
     Vector2 lastDir;
-    Rectangle hitbox;
+    Circle hitCircle;
 
     Texture2D idle;
     Texture2D run;
@@ -45,7 +47,10 @@ class Player {
     float knockback;
     bool atkReady;
     Texture2D atkTexture;
-    Rectangle atkHitbox;
+    float radius;
+    float weaponRadius;
+    float weaponDistance;
+    Circle atkCircle;
 
     float dashSpeed;
     float dashDur;

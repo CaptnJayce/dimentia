@@ -6,53 +6,50 @@
 std::vector<Enemy> enemies;
 
 void Enemy::Init() {
-    // TODO: hitbox
-    pos = {200, 200};
-    dir = {0, 0};
-
+    pos = {200.0f, 200.0f};
+    dir = {0.0f, 0.0f};
     texture = LoadTexture("../sprites/abominable_mass.png");
 
-    speed = 80.0;
+    speed = 80.0f;
+    velocity = {0.0f, 0.0f};
+    knockbackVelocity = {0.0f, 0.0f};
+    knockbackResistance = 0.2f;
 
-    width = 28.0;
-    height = 13.0;
+    width = 28.0f;
+    height = 13.0f;
+    hitCircle = {pos.x + width / 2.0f, pos.y + height / 2.0f, 8.0f};
 
-    hitbox = {0, 0, width, height};
-
-    damage = 10.0;
-    health = 10.0;
-
-    iframes = 1.0; // invuln for 1 second
+    damage = 10.0f;
+    health = 10.0f;
+    iframes = 1.0f; // invuln for 1 second
     iframeTimer = iframes;
     iframesReady = true;
-
-    velocity = {0, 0};
-    knockbackVelocity = {0, 0};
-    knockbackResistance = 0.0;
 }
 
 void Enemy::Move(const Player &player) {
     float delta = GetFrameTime();
 
-    // good nuff
-    dir = Vector2Normalize(player.pos - pos);
+    Vector2 playerCenter = {player.pos.x + player.width / 2.0f, player.pos.y + player.height / 2.0f};
+    Vector2 enemyCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
+    dir = Vector2Normalize(Vector2Subtract(playerCenter, enemyCenter));
+
     pos.x += dir.x * speed * delta;
     pos.y += dir.y * speed * delta;
 
-    hitbox.x = pos.x;
-    hitbox.y = pos.y;
+    hitCircle.x = pos.x + width / 2.0f;
+    hitCircle.y = pos.y + height / 2.0f;
 }
 
-void Enemy::Receive(Vector2 source, Rectangle damageSource, float knockback, float damage) {
-    Vector2 enemyCenter = {hitbox.x + hitbox.width / 2, hitbox.y + hitbox.height / 2};
-
+void Enemy::Receive(Vector2 source, Circle damageSource, float knockback, float damage) {
+    Vector2 enemyCenter = {hitCircle.x, hitCircle.y};
     Vector2 direction = Vector2Subtract(enemyCenter, source);
-    if (Vector2Length(direction) > 0) {
+
+    if (Vector2Length(direction) > 0.0f) {
         direction = Vector2Normalize(direction);
     }
 
     if (iframesReady) {
-        knockbackVelocity = Vector2Scale(direction, knockback);
+        knockbackVelocity = Vector2Scale(direction, knockback * (1.0f - knockbackResistance));
         health -= damage;
         iframesReady = false;
         iframeTimer = iframes;
@@ -61,7 +58,7 @@ void Enemy::Receive(Vector2 source, Rectangle damageSource, float knockback, flo
 
 void Enemy::Die() {
     for (auto it = enemies.begin(); it != enemies.end();) {
-        if ((*it).health <= 0) {
+        if ((*it).health <= 0.0f) {
             UnloadTexture((*it).texture);
             it = enemies.erase(it);
         } else {
@@ -87,13 +84,13 @@ void Enemy::Update() {
         knockbackVelocity = Vector2Zero();
     }
 
-    hitbox.x = pos.x;
-    hitbox.y = pos.y;
+    hitCircle.x = pos.x + width / 2.0f;
+    hitCircle.y = pos.y + height / 2.0f;
 }
 
 void Enemy::Draw() {
-    DrawRectangleLinesEx(hitbox, 1.0f, RED);
+    DrawCircleLines(hitCircle.x, hitCircle.y, hitCircle.radius, RED);
 
-    Rectangle rect = {0, 0, (float)texture.width, (float)texture.height};
-    DrawTextureRec(texture, rect, pos, RAYWHITE);
+    Rectangle srcRect = {0.0f, 0.0f, (float)texture.width, (float)texture.height};
+    DrawTextureRec(texture, srcRect, pos, RAYWHITE);
 }
