@@ -1,5 +1,6 @@
 #include "../include/Enemy.hpp"
 #include "../include/Player.hpp"
+#include "../include/SpatialGrid.hpp"
 #include <raylib.h>
 
 int main() {
