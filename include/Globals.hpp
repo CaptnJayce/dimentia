@@ -1,7 +1,7 @@
 #pragma once
+#include <raylib.h>
 
 struct Circle {
-    float x;
-    float y;
+    Vector2 pos;
     float radius;
 };

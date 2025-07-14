@@ -105,8 +105,8 @@ void Player::Move() {
         currentVelocity = std::min(currentVelocity, maxVelocity);
     }
 
-    hitCircle.x = pos.x + width / 2.0f;
-    hitCircle.y = pos.y + height / 2.0f;
+    hitCircle.pos.x = pos.x + width / 2.0f;
+    hitCircle.pos.y = pos.y + height / 2.0f;
 
     camera.target = Vector2Lerp(camera.target, pos, 20.0f * delta);
 }
@@ -123,12 +123,12 @@ void Player::Attack(std::vector<Enemy> &enemies) {
     Vector2 weaponPosition = {playerCenter.x + normalized.x * weaponDistance,
                               playerCenter.y + normalized.y * weaponDistance};
 
-    atkCircle.x = weaponPosition.x;
-    atkCircle.y = weaponPosition.y;
+    atkCircle.pos.x = weaponPosition.x;
+    atkCircle.pos.y = weaponPosition.y;
 
     for (int i = 0; i < enemies.size();) {
         Enemy &enemy = enemies[i];
-        if (CheckCollisionCircles(weaponPosition, atkCircle.radius, {enemy.hitCircle.x, enemy.hitCircle.y},
+        if (CheckCollisionCircles(weaponPosition, atkCircle.radius, {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y},
                                   enemy.hitCircle.radius)) {
             enemy.Receive(pos, atkCircle, knockback, damage);
             if (enemy.health <= 0.0f) {
@@ -152,8 +152,8 @@ void Player::Receive(std::vector<Enemy> &enemies) {
 
     if (iframesReady) {
         for (Enemy &enemy : enemies) {
-            if (CheckCollisionCircles({hitCircle.x, hitCircle.y}, hitCircle.radius,
-                                      {enemy.hitCircle.x, enemy.hitCircle.y}, enemy.hitCircle.radius)) {
+            if (CheckCollisionCircles({hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius,
+                                      {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y}, enemy.hitCircle.radius)) {
 
                 health -= enemy.damage;
                 iframesReady = false;
@@ -195,15 +195,15 @@ void Player::Draw() {
     float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
 
     if (atkActiveTimer > 0.0f) {
-        DrawCircleLines(atkCircle.x, atkCircle.y, atkCircle.radius, RED);
+        DrawCircleLines(atkCircle.pos.x, atkCircle.pos.y, atkCircle.radius, RED);
 
         Vector2 txtOrigin = {(float)atkTexture.width / 2.0f, (float)atkTexture.height / 2.0f};
-        Rectangle destRec = {atkCircle.x, atkCircle.y, (float)atkTexture.width, (float)atkTexture.height};
+        Rectangle destRec = {atkCircle.pos.x, atkCircle.pos.y, (float)atkTexture.width, (float)atkTexture.height};
         DrawTexturePro(atkTexture, Rectangle{0.0f, 0.0f, (float)atkTexture.width, (float)atkTexture.height}, destRec,
                        txtOrigin, rotation, WHITE);
     }
 
-    DrawCircleLines(hitCircle.x, hitCircle.y, hitCircle.radius, GREEN);
+    DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, GREEN);
 
     bool flipSprite = (lastDir.x < 0.0f);
     animManager.Draw(pos, flipSprite);

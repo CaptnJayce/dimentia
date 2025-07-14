@@ -36,12 +36,12 @@ void Enemy::Move(const Player &player) {
     pos.x += dir.x * speed * delta;
     pos.y += dir.y * speed * delta;
 
-    hitCircle.x = pos.x + width / 2.0f;
-    hitCircle.y = pos.y + height / 2.0f;
+    hitCircle.pos.x = pos.x + width / 2.0f;
+    hitCircle.pos.y = pos.y + height / 2.0f;
 }
 
 void Enemy::Receive(Vector2 source, Circle damageSource, float knockback, float damage) {
-    Vector2 enemyCenter = {hitCircle.x, hitCircle.y};
+    Vector2 enemyCenter = {hitCircle.pos.x, hitCircle.pos.y};
     Vector2 direction = Vector2Subtract(enemyCenter, source);
 
     if (Vector2Length(direction) > 0.0f) {
@@ -84,12 +84,12 @@ void Enemy::Update() {
         knockbackVelocity = Vector2Zero();
     }
 
-    hitCircle.x = pos.x + width / 2.0f;
-    hitCircle.y = pos.y + height / 2.0f;
+    hitCircle.pos.x = pos.x + width / 2.0f;
+    hitCircle.pos.y = pos.y + height / 2.0f;
 }
 
 void Enemy::Draw() {
-    DrawCircleLines(hitCircle.x, hitCircle.y, hitCircle.radius, RED);
+    DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, RED);
 
     Rectangle srcRect = {0.0f, 0.0f, (float)texture.width, (float)texture.height};
     DrawTextureRec(texture, srcRect, pos, RAYWHITE);
