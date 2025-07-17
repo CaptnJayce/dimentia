@@ -1,6 +1,7 @@
 #include "../include/Enemy.hpp"
+#include "../include/GUI.hpp"
 #include "../include/Player.hpp"
-#include "../include/SpatialGrid.hpp"
+// #include "../include/SpatialGrid.hpp"
 #include <raylib.h>
 
 int main() {
@@ -12,6 +13,7 @@ int main() {
 
     Player p;
     p.Init();
+    UI ui;
 
     // TODO: replace with actual spawning logic
     for (int i = 0; i < 5; i++) {
@@ -27,6 +29,14 @@ int main() {
         // Update
         p.Move();
         p.Update(enemies);
+
+        if (IsKeyPressed(KEY_ONE)) {
+            ui.LoadScene(UI::MainMenu);
+        }
+        if (IsKeyPressed(KEY_TWO)) {
+            ui.LoadScene(UI::Game);
+        }
+        ui.Update();
 
         for (Enemy &enemy : enemies) {
             enemy.Move(p);
@@ -48,6 +58,7 @@ int main() {
         // UI
         DrawFPS(10, 10);
         DrawText(TextFormat("Health %f", p.health), 10, 30, 20, WHITE);
+        ui.Draw();
 
         EndDrawing();
     }

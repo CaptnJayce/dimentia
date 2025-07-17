@@ -14,6 +14,7 @@ add_executable(Dimentia
     src/Player.cpp
     src/Enemy.cpp
     src/AnimationManager.cpp
+    src/GUI.cpp
 )
 
 target_link_libraries(Dimentia PRIVATE raylib)
