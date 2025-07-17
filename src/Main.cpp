@@ -13,7 +13,7 @@ int main() {
 
     Player p;
     p.Init();
-    UI ui;
+    UI ui(p);
 
     // TODO: replace with actual spawning logic
     for (int i = 0; i < 5; i++) {
@@ -56,8 +56,6 @@ int main() {
         EndMode2D();
 
         // UI
-        DrawFPS(10, 10);
-        DrawText(TextFormat("Health %f", p.health), 10, 30, 20, WHITE);
         ui.Draw();
 
         EndDrawing();

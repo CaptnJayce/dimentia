@@ -1,10 +1,11 @@
 #pragma once
+#include "./Player.hpp"
 #include <functional>
 #include <unordered_map>
 
 class UI {
   public:
-    UI();
+    UI(Player &player);
     ~UI();
 
     enum Scene { MainMenu, Game, Settings, Pause };
@@ -19,6 +20,8 @@ class UI {
   private:
     Scene m_currentScene;
     Scene m_previousScene;
+
+    Player &m_player;
 
     std::unordered_map<Scene, std::function<void()>> m_drawFunctions;
     std::unordered_map<Scene, std::function<void()>> m_updateFunctions;
