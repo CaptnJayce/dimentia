@@ -36,7 +36,7 @@ void Player::Init() {
     atkReady = true;
     knockback = 500.0f;
     weaponRadius = 8.0f;
-    weaponDistance = 30.0f;
+    weaponDistance = 15.0f;
     atkTexture = LoadTexture("../sprites/crescent_slash.png");
 
     health = 100.0f;

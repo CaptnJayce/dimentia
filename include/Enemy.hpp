@@ -1,11 +1,12 @@
 #pragma once
 #include "./Globals.hpp"
 #include <raylib.h>
+#include <unordered_set>
 #include <vector>
 
 class Player;
+class SpatialGrid;
 
-// TODO: make it so enemies dont overlap with each other
 class Enemy {
   public:
     Vector2 pos;
@@ -19,12 +20,13 @@ class Enemy {
 
     float damage;
 
-    // TODO: give enemies slightly random speed
     float speed;
     float knockbackResistance;
 
     float width;
     float height;
+
+    std::unordered_set<int> gridCells;
 
     float health;
 
@@ -34,9 +36,10 @@ class Enemy {
 
     void Init();
     void Move(const Player &player);
-    void Update();
     void Receive(Vector2 source, Circle damageSource, float force, float damage);
     void Die();
+    void Update(const SpatialGrid &grid);
+    void Avoid(const std::vector<Enemy *> &nearbyEnemies);
     void Draw();
 };
 

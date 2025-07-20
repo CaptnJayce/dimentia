@@ -1,5 +1,6 @@
 #include "../include/Enemy.hpp"
 #include "../include/Player.hpp"
+#include "../include/SpatialGrid.hpp"
 #include <raylib.h>
 #include <raymath.h>
 
@@ -21,9 +22,42 @@ void Enemy::Init() {
 
     damage = 10.0f;
     health = 10.0f;
-    iframes = 1.0f; // invuln for 1 second
+    iframes = 1.0f;
     iframeTimer = iframes;
     iframesReady = true;
+
+    gridCells.clear();
+}
+
+void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
+    const float avoidanceRadius = 15.0f;
+    const float avoidanceForce = 1000.0f;
+
+    Vector2 avoidance = {0, 0};
+    int count = 0;
+
+    for (Enemy *other : nearbyEnemies) {
+        if (other == this) {
+            continue;
+        }
+
+        Vector2 diff = Vector2Subtract({pos.x + width / 2, pos.y + height / 2},
+                                       {other->pos.x + other->width / 2, other->pos.y + other->height / 2});
+        float distance = Vector2Length(diff);
+
+        if (distance < avoidanceRadius && distance > 0) {
+            Vector2 normalized = Vector2Normalize(diff);
+            float strength = avoidanceForce * (1.0f - distance / avoidanceRadius);
+            avoidance = Vector2Add(avoidance, Vector2Scale(normalized, strength));
+            count++;
+        }
+    }
+
+    if (count > 0) {
+        avoidance.x /= count;
+        avoidance.y /= count;
+        pos = Vector2Add(pos, Vector2Scale(avoidance, GetFrameTime()));
+    }
 }
 
 void Enemy::Move(const Player &player) {
@@ -33,8 +67,10 @@ void Enemy::Move(const Player &player) {
     Vector2 enemyCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
     dir = Vector2Normalize(Vector2Subtract(playerCenter, enemyCenter));
 
-    pos.x += dir.x * speed * delta;
-    pos.y += dir.y * speed * delta;
+    Vector2 movement = {dir.x * speed * delta, dir.y * speed * delta};
+
+    pos.x += movement.x;
+    pos.y += movement.y;
 
     hitCircle.pos.x = pos.x + width / 2.0f;
     hitCircle.pos.y = pos.y + height / 2.0f;
@@ -67,7 +103,7 @@ void Enemy::Die() {
     }
 }
 
-void Enemy::Update() {
+void Enemy::Update(const SpatialGrid &grid) {
     float delta = GetFrameTime();
 
     if (!iframesReady) {
@@ -82,6 +118,12 @@ void Enemy::Update() {
         knockbackVelocity = Vector2Lerp(knockbackVelocity, Vector2Zero(), 5.0f * delta);
     } else {
         knockbackVelocity = Vector2Zero();
+    }
+
+    // dont check collision when being knocked back
+    if (Vector2Length(knockbackVelocity) <= 0.1f) {
+        auto nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
+        Avoid(nearbyEnemies);
     }
 
     hitCircle.pos.x = pos.x + width / 2.0f;

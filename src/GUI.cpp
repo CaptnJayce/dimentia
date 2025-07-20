@@ -2,6 +2,7 @@
 #include <raylib.h>
 
 // TODO: change Game to MainMenu when introduced
+// Default Menu
 UI::UI(Player &player) : m_currentScene(Game), m_previousScene(Game), m_player(player) {
     InitMainMenuUI();
     InitGameUI();

@@ -5,20 +5,24 @@
 class SpatialGrid {
   private:
     float cellSize;
-    float gridWidth;
-    float gridHeight;
+    int gridWidth;
+    int gridHeight;
     std::vector<std::vector<Enemy *>> cells;
 
-    // convert 2D grid into 1D
     int Flatten(int x, int y) const;
 
+    std::tuple<int, int, int, int> GetCellRange(Enemy *enemy) const;
+
   public:
-    // init grid based on world size
     SpatialGrid(float gameWidth, float gameHeight, float cellSize);
 
     void Clear();
     void Insert(Enemy *enemy);
+    void Update(Enemy *enemy);
+    void Draw();
+    void Remove(Enemy *enemy);
 
-    // get enemies cell & adjacent cells (3x3 area for now)
     std::vector<Enemy *> GetNeighbours(Enemy *enemy);
+    std::vector<Enemy *> GetPotentialCollisions(Enemy *enemy);
+    std::vector<Enemy *> GetNeighboursInRadius(Enemy *enemy, float radius) const;
 };
