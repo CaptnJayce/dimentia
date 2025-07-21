@@ -9,6 +9,8 @@ std::vector<Enemy> enemies;
 void Enemy::Init() {
     pos = {200.0f, 200.0f};
     dir = {0.0f, 0.0f};
+
+    // TODO: Move all textures into own Init file to prevent reuse of texture
     texture = LoadTexture("../sprites/abominable_mass.png");
 
     speed = 80.0f;
@@ -30,33 +32,27 @@ void Enemy::Init() {
 }
 
 void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
-    const float avoidanceRadius = 15.0f;
-    const float avoidanceForce = 1000.0f;
-
-    Vector2 avoidance = {0, 0};
-    int count = 0;
+    const float minDistance = 16.0f; // 2 * hitCircle.radius (8.0f * 2)
 
     for (Enemy *other : nearbyEnemies) {
         if (other == this) {
             continue;
         }
 
-        Vector2 diff = Vector2Subtract({pos.x + width / 2, pos.y + height / 2},
-                                       {other->pos.x + other->width / 2, other->pos.y + other->height / 2});
+        Vector2 enemyCenter = {pos.x + width / 2, pos.y + height / 2};
+        Vector2 otherCenter = {other->pos.x + other->width / 2, other->pos.y + other->height / 2};
+
+        Vector2 diff = Vector2Subtract(enemyCenter, otherCenter);
         float distance = Vector2Length(diff);
 
-        if (distance < avoidanceRadius && distance > 0) {
-            Vector2 normalized = Vector2Normalize(diff);
-            float strength = avoidanceForce * (1.0f - distance / avoidanceRadius);
-            avoidance = Vector2Add(avoidance, Vector2Scale(normalized, strength));
-            count++;
-        }
-    }
+        if (distance < minDistance && distance > 0) {
+            float overlap = minDistance - distance;
+            Vector2 direction = Vector2Normalize(diff);
 
-    if (count > 0) {
-        avoidance.x /= count;
-        avoidance.y /= count;
-        pos = Vector2Add(pos, Vector2Scale(avoidance, GetFrameTime()));
+            Vector2 separation = Vector2Scale(direction, overlap * 0.5f);
+            pos = Vector2Add(pos, separation);
+            other->pos = Vector2Subtract(other->pos, separation);
+        }
     }
 }
 
@@ -120,11 +116,8 @@ void Enemy::Update(const SpatialGrid &grid) {
         knockbackVelocity = Vector2Zero();
     }
 
-    // dont check collision when being knocked back
-    if (Vector2Length(knockbackVelocity) <= 0.1f) {
-        auto nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
-        Avoid(nearbyEnemies);
-    }
+    std::vector<Enemy *> nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
+    Avoid(nearbyEnemies);
 
     hitCircle.pos.x = pos.x + width / 2.0f;
     hitCircle.pos.y = pos.y + height / 2.0f;

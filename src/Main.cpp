@@ -19,10 +19,12 @@ int main() {
     float cellSize = 25.0f;
     SpatialGrid grid(screenWidth, screenHeight, cellSize);
 
-    for (int i = 0; i < 5; i++) {
+    float randValue;
+    float anotherRandValue;
+    for (int i = 0; i < 250; i++) {
         Enemy e;
         e.Init();
-        e.pos = {static_cast<float>(300 + i * 200), static_cast<float>(200 + i * 100)};
+        e.pos = {randValue = GetRandomValue(-100, 100), anotherRandValue = GetRandomValue(-100, 100)};
         enemies.push_back(e);
         grid.Insert(&enemies.back());
     }

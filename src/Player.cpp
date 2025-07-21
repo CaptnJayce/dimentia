@@ -151,14 +151,31 @@ void Player::Receive(std::vector<Enemy> &enemies) {
     }
 
     if (iframesReady) {
+        bool tookDamage = false;
         for (Enemy &enemy : enemies) {
             if (CheckCollisionCircles({hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius,
                                       {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y}, enemy.hitCircle.radius)) {
-
                 health -= enemy.damage;
-                iframesReady = false;
-                iframeTimer = iframes;
+                tookDamage = true;
                 break;
+            }
+        }
+
+        if (tookDamage) {
+            iframesReady = false;
+            iframeTimer = iframes;
+
+            // knockback all enemies on hit
+            for (Enemy &enemy : enemies) {
+                Vector2 enemyCenter = {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y};
+                Vector2 playerCenter = {hitCircle.pos.x, hitCircle.pos.y};
+                Vector2 direction = Vector2Subtract(enemyCenter, playerCenter);
+
+                if (Vector2Length(direction) > 0.0f) {
+                    direction = Vector2Normalize(direction);
+                }
+
+                enemy.knockbackVelocity = Vector2Scale(direction, knockback * 0.5f);
             }
         }
     }
