@@ -11,7 +11,7 @@ void Enemy::Init() {
     dir = {0.0f, 0.0f};
 
     // TODO: Move all textures into own Init file to prevent reuse of texture
-    texture = LoadTexture("../sprites/abominable_mass.png");
+    texture = textures.abominableMassTexture;
 
     speed = 80.0f;
     velocity = {0.0f, 0.0f};

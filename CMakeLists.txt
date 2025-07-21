@@ -16,6 +16,7 @@ add_executable(Dimentia
     src/AnimationManager.cpp
     src/GUI.cpp
     src/SpatialGrid.cpp
+    src/Globals.cpp
 )
 
 target_link_libraries(Dimentia PRIVATE raylib)

@@ -16,15 +16,15 @@ void Player::Init() {
     cursorPos = {0.0f, 0.0f};
 
     speed = 10.0f;
-    dashSpeed = 600.0f;
+    dashSpeed = 300.0f;
     dashDur = 0.2f;
-    dashCooldown = 1.0f;
+    dashCooldown = 3.0f;
     dashTimer = 0.0f;
     dashReady = true;
     friction = 4000.0f;
     velocity = 200.0f;
     currentVelocity = 0.0f;
-    maxVelocity = 200.0f;
+    maxVelocity = 100.0f;
     moving = false;
 
     damage = 5.0f;
@@ -37,7 +37,7 @@ void Player::Init() {
     knockback = 500.0f;
     weaponRadius = 8.0f;
     weaponDistance = 15.0f;
-    atkTexture = LoadTexture("../sprites/crescent_slash.png");
+    atkTexture = textures.huskOneWeaponTexture;
 
     health = 100.0f;
     iframes = 1.0f;
@@ -55,7 +55,7 @@ void Player::Init() {
     camera.target = pos;
     camera.offset = {1920.0f / 2.0f, 1080.0f / 2.0f};
     camera.rotation = 0.0f;
-    camera.zoom = 4.0f;
+    camera.zoom = 3.0f;
 }
 
 void Player::Move() {

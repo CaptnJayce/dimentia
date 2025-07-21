@@ -1,5 +1,6 @@
 #include "../include/Enemy.hpp"
 #include "../include/GUI.hpp"
+#include "../include/Globals.hpp"
 #include "../include/Player.hpp"
 #include "../include/SpatialGrid.hpp"
 #include <raylib.h>
@@ -11,6 +12,8 @@ int main() {
     SetTargetFPS(120);
     InitWindow(screenWidth, screenHeight, "Kalpa: Chaos");
 
+    InitTextures();
+
     Player p;
     p.Init();
 
@@ -21,7 +24,7 @@ int main() {
 
     float randValue;
     float anotherRandValue;
-    for (int i = 0; i < 250; i++) {
+    for (int i = 0; i < 10; i++) {
         Enemy e;
         e.Init();
         e.pos = {randValue = GetRandomValue(-100, 100), anotherRandValue = GetRandomValue(-100, 100)};
