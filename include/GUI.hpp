@@ -13,7 +13,7 @@ class UI {
     void LoadScene(Scene newScene);
     Scene GetCurrentScene() const { return m_currentScene; }
 
-    void Init();
+    static void Init();
     void Update();
     void Draw();
 
@@ -29,5 +29,5 @@ class UI {
     void InitMainMenuUI();
     void InitGameUI();
 
-    void UnloadCurrentScene();
+    void UnloadCurrentScene() const;
 };

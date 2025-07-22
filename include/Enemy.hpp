@@ -36,11 +36,11 @@ class Enemy {
 
     void Init();
     void Move(const Player &player);
-    void Receive(Vector2 source, Circle damageSource, float force, float damage);
-    void Die();
+    void Receive(Vector2 source, Circle damageSource, float knockback, float damage);
+    static void Die();
     void Update(const SpatialGrid &grid);
     void Avoid(const std::vector<Enemy *> &nearbyEnemies);
-    void Draw();
+    void Draw() const;
 };
 
 extern std::vector<Enemy> enemies;

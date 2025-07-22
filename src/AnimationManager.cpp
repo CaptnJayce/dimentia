@@ -3,8 +3,9 @@
 
 AnimationManager::AnimationManager() : currentState(AnimState::IDLE) {}
 
-void AnimationManager::AddAnimation(AnimState state, const char *path, int frames, float delay, bool loops) {
-    Animation anim;
+void AnimationManager::AddAnimation(const AnimState state, const char *path, const int frames, const float delay,
+                                    const bool loops) {
+    Animation anim{};
     anim.sheet = LoadTexture(path);
     anim.frameCount = frames;
     anim.frameDelay = delay;
@@ -15,7 +16,7 @@ void AnimationManager::AddAnimation(AnimState state, const char *path, int frame
     animations[state] = anim;
 }
 
-void AnimationManager::Play(AnimState state, bool forceRestart) {
+void AnimationManager::Play(const AnimState state, const bool forceRestart) {
     if (currentState != state || forceRestart) {
         currentState = state;
         auto &anim = animations[state];
@@ -42,8 +43,8 @@ void AnimationManager::Update() {
     }
 }
 
-void AnimationManager::Draw(Vector2 position, bool flipX) {
-    auto &anim = animations[currentState];
+void AnimationManager::Draw(const Vector2 position, const bool flipX) {
+    const auto &anim = animations[currentState];
     Rectangle source = anim.frameRec;
     if (flipX) {
         source.width *= -1;

@@ -47,7 +47,7 @@ void Player::Init() {
     width = 10.0f;
     height = 22.0f;
 
-    Vector2 center = {pos.x + width / 2.0f, pos.y + height / 2.0f};
+    const Vector2 center = {pos.x + width / 2.0f, pos.y + height / 2.0f};
     hitCircle = {center.x, center.y, 8.0f};
     atkCircle = {center.x, center.y, weaponRadius};
 
@@ -59,7 +59,7 @@ void Player::Init() {
 }
 
 void Player::Move() {
-    float delta = GetFrameTime();
+    const float delta = GetFrameTime();
     dashTimer -= delta;
 
     if (IsKeyPressed(KEY_LEFT_SHIFT) && dashReady) {
@@ -116,11 +116,11 @@ void Player::Attack(std::vector<Enemy> &enemies) {
         return;
     }
 
-    Vector2 playerCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
-    Vector2 direction = Vector2Subtract(cursorPos, playerCenter);
-    Vector2 normalized = Vector2Normalize(direction);
+    const Vector2 playerCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
+    const Vector2 direction = Vector2Subtract(cursorPos, playerCenter);
+    const Vector2 normalized = Vector2Normalize(direction);
 
-    Vector2 weaponPosition = {playerCenter.x + normalized.x * weaponDistance,
+    const Vector2 weaponPosition = {playerCenter.x + normalized.x * weaponDistance,
                               playerCenter.y + normalized.y * weaponDistance};
 
     atkCircle.pos.x = weaponPosition.x;
@@ -141,7 +141,7 @@ void Player::Attack(std::vector<Enemy> &enemies) {
 }
 
 void Player::Receive(std::vector<Enemy> &enemies) {
-    float delta = GetFrameTime();
+    const float delta = GetFrameTime();
 
     if (!iframesReady) {
         iframeTimer -= delta;
@@ -152,7 +152,7 @@ void Player::Receive(std::vector<Enemy> &enemies) {
 
     if (iframesReady) {
         bool tookDamage = false;
-        for (Enemy &enemy : enemies) {
+        for (const Enemy &enemy : enemies) {
             if (CheckCollisionCircles({hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius,
                                       {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y}, enemy.hitCircle.radius)) {
                 health -= enemy.damage;
@@ -167,8 +167,8 @@ void Player::Receive(std::vector<Enemy> &enemies) {
 
             // knockback all enemies on hit
             for (Enemy &enemy : enemies) {
-                Vector2 enemyCenter = {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y};
-                Vector2 playerCenter = {hitCircle.pos.x, hitCircle.pos.y};
+                const Vector2 enemyCenter = {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y};
+                const Vector2 playerCenter = {hitCircle.pos.x, hitCircle.pos.y};
                 Vector2 direction = Vector2Subtract(enemyCenter, playerCenter);
 
                 if (Vector2Length(direction) > 0.0f) {
@@ -182,7 +182,7 @@ void Player::Receive(std::vector<Enemy> &enemies) {
 }
 
 void Player::Update(std::vector<Enemy> &enemies) {
-    float delta = GetFrameTime();
+    const float delta = GetFrameTime();
 
     animManager.Update();
 
@@ -208,8 +208,8 @@ void Player::Update(std::vector<Enemy> &enemies) {
 void Player::Draw() {
     DrawCircleV(cursorPos, 5.0f, RED);
 
-    Vector2 direction = Vector2Subtract(cursorPos, pos);
-    float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
+    const Vector2 direction = Vector2Subtract(cursorPos, pos);
+    const float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
 
     if (atkActiveTimer > 0.0f) {
         DrawCircleLines(atkCircle.pos.x, atkCircle.pos.y, atkCircle.radius, RED);
@@ -222,11 +222,11 @@ void Player::Draw() {
 
     DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, GREEN);
 
-    bool flipSprite = (lastDir.x < 0.0f);
+    const bool flipSprite = (lastDir.x < 0.0f);
     animManager.Draw(pos, flipSprite);
 }
 
-void Player::ChangeAnimation(AnimState newState) {
+void Player::ChangeAnimation(const AnimState newState) {
     if (currentAnimState != newState) {
         currentAnimState = newState;
         animManager.Play(newState);

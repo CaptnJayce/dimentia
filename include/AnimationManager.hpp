@@ -26,7 +26,6 @@ class AnimationManager {
     void Play(AnimState state, bool forceRestart = false);
     void Update();
     void Draw(Vector2 position, bool flipX = false);
-    Rectangle GetCurrentFrame() const;
 
     AnimState GetCurrentState() const { return currentState; }
 

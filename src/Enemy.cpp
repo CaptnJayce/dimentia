@@ -32,24 +32,24 @@ void Enemy::Init() {
 }
 
 void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
-    const float minDistance = 16.0f; // 2 * hitCircle.radius (8.0f * 2)
 
     for (Enemy *other : nearbyEnemies) {
+        constexpr float minDistance = 16.0f;
+
         if (other == this) {
             continue;
         }
 
-        Vector2 enemyCenter = {pos.x + width / 2, pos.y + height / 2};
-        Vector2 otherCenter = {other->pos.x + other->width / 2, other->pos.y + other->height / 2};
+        const Vector2 enemyCenter = {pos.x + width / 2, pos.y + height / 2};
+        const Vector2 otherCenter = {other->pos.x + other->width / 2, other->pos.y + other->height / 2};
 
-        Vector2 diff = Vector2Subtract(enemyCenter, otherCenter);
-        float distance = Vector2Length(diff);
+        const Vector2 diff = Vector2Subtract(enemyCenter, otherCenter);
 
-        if (distance < minDistance && distance > 0) {
-            float overlap = minDistance - distance;
-            Vector2 direction = Vector2Normalize(diff);
+        if (const float distance = Vector2Length(diff); distance < minDistance && distance > 0) {
+            const float overlap = minDistance - distance;
+            const Vector2 direction = Vector2Normalize(diff);
 
-            Vector2 separation = Vector2Scale(direction, overlap * 0.5f);
+            const Vector2 separation = Vector2Scale(direction, overlap * 0.5f);
             pos = Vector2Add(pos, separation);
             other->pos = Vector2Subtract(other->pos, separation);
         }
@@ -57,13 +57,13 @@ void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
 }
 
 void Enemy::Move(const Player &player) {
-    float delta = GetFrameTime();
+    const float delta = GetFrameTime();
 
-    Vector2 playerCenter = {player.pos.x + player.width / 2.0f, player.pos.y + player.height / 2.0f};
-    Vector2 enemyCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
+    const Vector2 playerCenter = {player.pos.x + player.width / 2.0f, player.pos.y + player.height / 2.0f};
+    const Vector2 enemyCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
     dir = Vector2Normalize(Vector2Subtract(playerCenter, enemyCenter));
 
-    Vector2 movement = {dir.x * speed * delta, dir.y * speed * delta};
+    const Vector2 movement = {dir.x * speed * delta, dir.y * speed * delta};
 
     pos.x += movement.x;
     pos.y += movement.y;
@@ -72,8 +72,8 @@ void Enemy::Move(const Player &player) {
     hitCircle.pos.y = pos.y + height / 2.0f;
 }
 
-void Enemy::Receive(Vector2 source, Circle damageSource, float knockback, float damage) {
-    Vector2 enemyCenter = {hitCircle.pos.x, hitCircle.pos.y};
+void Enemy::Receive(const Vector2 source, Circle damageSource, const float knockback, const float damage) {
+    const Vector2 enemyCenter = {hitCircle.pos.x, hitCircle.pos.y};
     Vector2 direction = Vector2Subtract(enemyCenter, source);
 
     if (Vector2Length(direction) > 0.0f) {
@@ -90,7 +90,7 @@ void Enemy::Receive(Vector2 source, Circle damageSource, float knockback, float 
 
 void Enemy::Die() {
     for (auto it = enemies.begin(); it != enemies.end();) {
-        if ((*it).health <= 0.0f) {
+        if (it->health <= 0.0f) {
             UnloadTexture((*it).texture);
             it = enemies.erase(it);
         } else {
@@ -100,7 +100,7 @@ void Enemy::Die() {
 }
 
 void Enemy::Update(const SpatialGrid &grid) {
-    float delta = GetFrameTime();
+    const float delta = GetFrameTime();
 
     if (!iframesReady) {
         iframeTimer -= delta;
@@ -116,16 +116,16 @@ void Enemy::Update(const SpatialGrid &grid) {
         knockbackVelocity = Vector2Zero();
     }
 
-    std::vector<Enemy *> nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
+    const std::vector<Enemy *> nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
     Avoid(nearbyEnemies);
 
     hitCircle.pos.x = pos.x + width / 2.0f;
     hitCircle.pos.y = pos.y + height / 2.0f;
 }
 
-void Enemy::Draw() {
+void Enemy::Draw() const {
     DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, RED);
 
-    Rectangle srcRect = {0.0f, 0.0f, (float)texture.width, (float)texture.height};
+    const Rectangle srcRect = {0.0f, 0.0f, (float)texture.width, (float)texture.height};
     DrawTextureRec(texture, srcRect, pos, RAYWHITE);
 }

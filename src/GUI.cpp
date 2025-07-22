@@ -14,7 +14,7 @@ void UI::Init() {
     // TODO: global UI
 }
 
-void UI::LoadScene(Scene newScene) {
+void UI::LoadScene(const Scene newScene) {
     if (m_currentScene == newScene) {
         return;
     }
@@ -24,7 +24,7 @@ void UI::LoadScene(Scene newScene) {
     m_currentScene = newScene;
 }
 
-void UI::UnloadCurrentScene() {
+void UI::UnloadCurrentScene() const {
     switch (m_currentScene) {
     case MainMenu:
         break;
