@@ -12,69 +12,58 @@ class Player {
     void Init();
     void ChangeAnimation(AnimState newState);
     void Move();
-    void Attack(std::vector<Enemy> &enemies);
     void Receive(std::vector<Enemy> &enemies);
     void Update(std::vector<Enemy> &enemies);
     void Draw();
 
-    // TODO should probably make these private at some point
     Vector2 pos;
-    Vector2 dir;
-    Vector2 lastDir;
     Circle hitCircle;
 
-    Texture2D idle;
-    Texture2D run;
-    Texture2D currentAnim;
-
-    int frameDelay;
-    int frameCounter;
-    int animFrames;
-    int currentAnimFrame;
-    int frameWidth;
-    int frameHeight;
-
-    float speed;
-    float friction;
-    Vector2 cursorPos;
-
-    float damage;
-    float atkSpeed;
-    float atkCooldown;
-    float atkDuration;
-    float atkActiveTimer;
-    float atkCooldownTimer;
-    float knockback;
-    bool atkReady;
-    Texture2D atkTexture;
-    float radius;
-    float weaponRadius;
-    float weaponDistance;
-    Circle atkCircle;
-
-    float dashSpeed;
-    float dashDur;
-    float dashCooldown;
-    float dashTimer;
-    bool dashReady;
-
-    float velocity;
-    float currentVelocity;
-    float maxVelocity;
-    bool moving;
+    float health;
 
     float width;
     float height;
-    float health;
-    float iframes;
-    float iframeTimer;
-    bool iframesReady;
 
     Camera2D camera;
-    float zoom;
-    float offset;
-    Vector2 target;
 
-    AnimationManager animManager;
     AnimState currentAnimState;
+
+  private:
+    Vector2 m_dir{};
+    Vector2 m_lastDir{};
+    float m_speed{};
+    float m_friction{};
+    float m_velocity{};
+    float m_currentVelocity{};
+    float m_maxVelocity{};
+    bool m_moving{};
+
+    float m_dashSpeed{};
+    float m_dashDur{};
+    float m_dashCooldown{};
+    float m_dashTimer{};
+    bool m_dashReady{};
+
+    Texture2D m_idle{};
+    Texture2D m_run{};
+    Texture2D m_currentAnim{};
+    int m_frameDelay{};
+    int m_frameCounter{};
+    int m_animFrames{};
+    int m_currentAnimFrame{};
+    int m_frameWidth{};
+    int m_frameHeight{};
+    AnimationManager m_animManager;
+
+    Vector2 m_cursorPos{};
+
+    float m_iframes{};
+    float m_iframeTimer{};
+    bool m_iframesReady{};
+
+    float m_zoom{};
+    float m_offset{};
+    Vector2 m_target{};
+
+    float m_radius{};
 };

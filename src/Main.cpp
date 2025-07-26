@@ -22,6 +22,7 @@ int main() {
     float cellSize = 25.0f;
     SpatialGrid grid(screenWidth, screenHeight, cellSize);
 
+    /*
     float randValue;
     float anotherRandValue;
     for (int i = 0; i < 10; i++) {
@@ -31,6 +32,7 @@ int main() {
         enemies.push_back(e);
         grid.Insert(&enemies.back());
     }
+    */
 
     while (!WindowShouldClose()) {
         float delta = GetFrameTime();
@@ -75,7 +77,7 @@ int main() {
             enemy.Draw();
         }
 
-        grid.Draw();
+        // grid.Draw();
 
         EndMode2D();
         ui.Draw();

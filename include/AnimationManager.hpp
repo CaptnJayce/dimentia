@@ -5,6 +5,7 @@
 enum class AnimState {
     IDLE,
     RUN,
+    ATTACK,
 };
 
 struct Animation {

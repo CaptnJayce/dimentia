@@ -6,50 +6,51 @@
 #include <raymath.h>
 
 void Player::Init() {
-    animManager.AddAnimation(AnimState::IDLE, "../sprites/s_HuskOneIdle.png", 19, 0.1f, true);
-    animManager.AddAnimation(AnimState::RUN, "../sprites/s_HuskOneRun.png", 6, 0.1f, true);
+    m_animManager.AddAnimation(AnimState::IDLE, "../sprites/s_HuskOneIdle.png", 19, 0.1f, true);
+    m_animManager.AddAnimation(AnimState::RUN, "../sprites/s_HuskOneRun.png", 6, 0.1f, true);
+    m_animManager.AddAnimation(AnimState::ATTACK, "../sprites/s_CrescentSlashOne.png", 5, 0.1f, false);
     currentAnimState = AnimState::IDLE;
 
     pos = {100.0f, 100.0f};
-    dir = {0.0f, 0.0f};
-    lastDir = {0.0f, 0.0f};
-    cursorPos = {0.0f, 0.0f};
+    m_dir = {0.0f, 0.0f};
+    m_lastDir = {0.0f, 0.0f};
+    m_cursorPos = {0.0f, 0.0f};
 
-    speed = 10.0f;
-    dashSpeed = 300.0f;
-    dashDur = 0.2f;
-    dashCooldown = 3.0f;
-    dashTimer = 0.0f;
-    dashReady = true;
-    friction = 4000.0f;
-    velocity = 200.0f;
-    currentVelocity = 0.0f;
-    maxVelocity = 100.0f;
-    moving = false;
+    m_speed = 10.0f;
+    m_dashSpeed = 300.0f;
+    m_dashDur = 0.2f;
+    m_dashCooldown = 3.0f;
+    m_dashTimer = 0.0f;
+    m_dashReady = true;
+    m_friction = 4000.0f;
+    m_velocity = 200.0f;
+    m_currentVelocity = 0.0f;
+    m_maxVelocity = 100.0f;
+    m_moving = false;
 
     damage = 5.0f;
-    atkSpeed = 100.0f;
-    atkCooldown = 0.5f;
-    atkDuration = 0.5f;
-    atkActiveTimer = 0.0f;
-    atkCooldownTimer = 0.0f;
-    atkReady = true;
+    m_atkSpeed = 100.0f;
+    m_atkCooldown = 0.5f;
+    m_atkDuration = 0.5f;
+    m_atkActiveTimer = 0.0f;
+    m_atkCooldownTimer = 0.0f;
+    m_atkReady = true;
     knockback = 500.0f;
-    weaponRadius = 8.0f;
-    weaponDistance = 15.0f;
-    atkTexture = textures.huskOneWeaponTexture;
+    m_weaponRadius = 8.0f;
+    m_weaponDistance = 15.0f;
+    m_atkTexture = textures.huskOneWeaponTexture;
 
     health = 100.0f;
-    iframes = 1.0f;
-    iframeTimer = iframes;
-    iframesReady = true;
+    m_iframes = 1.0f;
+    m_iframeTimer = m_iframes;
+    m_iframesReady = true;
 
     width = 10.0f;
     height = 22.0f;
 
     const Vector2 center = {pos.x + width / 2.0f, pos.y + height / 2.0f};
     hitCircle = {center.x, center.y, 8.0f};
-    atkCircle = {center.x, center.y, weaponRadius};
+    m_atkCircle = {center.x, center.y, m_weaponRadius};
 
     camera = {0};
     camera.target = pos;
@@ -60,49 +61,47 @@ void Player::Init() {
 
 void Player::Move() {
     const float delta = GetFrameTime();
-    dashTimer -= delta;
+    m_dashTimer -= delta;
 
-    if (IsKeyPressed(KEY_LEFT_SHIFT) && dashReady) {
-        dashTimer = dashDur;
-        dashReady = false;
+    if (IsKeyPressed(KEY_LEFT_SHIFT) && m_dashReady) {
+        m_dashTimer = m_dashDur;
+        m_dashReady = false;
     }
 
-    if (dashTimer > 0.0f) {
-        pos.x += lastDir.x * dashSpeed * delta;
-        pos.y += lastDir.y * dashSpeed * delta;
+    if (m_dashTimer > 0.0f) {
+        pos.x += m_lastDir.x * m_dashSpeed * delta;
+        pos.y += m_lastDir.y * m_dashSpeed * delta;
     } else {
-        if (dashTimer <= -dashCooldown) {
-            dashReady = true;
+        if (m_dashTimer <= -m_dashCooldown) {
+            m_dashReady = true;
         }
 
-        dir = {0.0f, 0.0f};
+        m_dir = {0.0f, 0.0f};
         if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))
-            dir.y -= 1.0f;
+            m_dir.y -= 1.0f;
         if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))
-            dir.y += 1.0f;
+            m_dir.y += 1.0f;
         if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
-            dir.x -= 1.0f;
+            m_dir.x -= 1.0f;
         if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
-            dir.x += 1.0f;
+            m_dir.x += 1.0f;
 
-        if (dir.x != 0.0f || dir.y != 0.0f) {
-            dir = Vector2Normalize(dir);
-            moving = true;
-            lastDir = dir;
-            currentVelocity += speed * velocity * delta;
-            currentVelocity = std::min(currentVelocity, maxVelocity);
-            ChangeAnimation(AnimState::RUN);
+        if (m_dir.x != 0.0f || m_dir.y != 0.0f) {
+            m_dir = Vector2Normalize(m_dir);
+            m_moving = true;
+            m_lastDir = m_dir;
+            m_currentVelocity += m_speed * m_velocity * delta;
+            m_currentVelocity = std::min(m_currentVelocity, m_maxVelocity);
         } else {
-            moving = false;
-            currentVelocity -= friction * delta;
-            currentVelocity = std::max(0.0f, currentVelocity);
-            ChangeAnimation(AnimState::IDLE);
+            m_moving = false;
+            m_currentVelocity -= m_friction * delta;
+            m_currentVelocity = std::max(0.0f, m_currentVelocity);
         }
 
-        pos.x += lastDir.x * currentVelocity * delta;
-        pos.y += lastDir.y * currentVelocity * delta;
+        pos.x += m_lastDir.x * m_currentVelocity * delta;
+        pos.y += m_lastDir.y * m_currentVelocity * delta;
 
-        currentVelocity = std::min(currentVelocity, maxVelocity);
+        m_currentVelocity = std::min(m_currentVelocity, m_maxVelocity);
     }
 
     hitCircle.pos.x = pos.x + width / 2.0f;
@@ -112,25 +111,30 @@ void Player::Move() {
 }
 
 void Player::Attack(std::vector<Enemy> &enemies) {
-    if (atkActiveTimer <= 0.0f) {
+    if (m_atkActiveTimer <= 0.0f) {
         return;
     }
 
     const Vector2 playerCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
-    const Vector2 direction = Vector2Subtract(cursorPos, playerCenter);
+    const Vector2 direction = Vector2Subtract(m_cursorPos, playerCenter);
     const Vector2 normalized = Vector2Normalize(direction);
 
-    const Vector2 weaponPosition = {playerCenter.x + normalized.x * weaponDistance,
-                              playerCenter.y + normalized.y * weaponDistance};
+    const Vector2 weaponPosition = {
+        playerCenter.x + normalized.x * m_weaponDistance,
+        playerCenter.y + normalized.y * m_weaponDistance
+    };
 
-    atkCircle.pos.x = weaponPosition.x;
-    atkCircle.pos.y = weaponPosition.y;
+    m_atkCircle.pos.x = weaponPosition.x;
+    m_atkCircle.pos.y = weaponPosition.y;
 
     for (int i = 0; i < enemies.size();) {
         Enemy &enemy = enemies[i];
-        if (CheckCollisionCircles(weaponPosition, atkCircle.radius, {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y},
-                                  enemy.hitCircle.radius)) {
-            enemy.Receive(pos, atkCircle, knockback, damage);
+        if (CheckCollisionCircles(
+            weaponPosition, m_atkCircle.radius,
+            {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y},
+            enemy.hitCircle.radius
+        )) {
+            enemy.Receive(pos, m_atkCircle, knockback, damage);
             if (enemy.health <= 0.0f) {
                 enemies.erase(enemies.begin() + i);
                 continue;
@@ -143,18 +147,20 @@ void Player::Attack(std::vector<Enemy> &enemies) {
 void Player::Receive(std::vector<Enemy> &enemies) {
     const float delta = GetFrameTime();
 
-    if (!iframesReady) {
-        iframeTimer -= delta;
-        if (iframeTimer <= 0.0f) {
-            iframesReady = true;
+    if (!m_iframesReady) {
+        m_iframeTimer -= delta;
+        if (m_iframeTimer <= 0.0f) {
+            m_iframesReady = true;
         }
     }
 
-    if (iframesReady) {
+    if (m_iframesReady) {
         bool tookDamage = false;
         for (const Enemy &enemy : enemies) {
-            if (CheckCollisionCircles({hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius,
-                                      {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y}, enemy.hitCircle.radius)) {
+            if (CheckCollisionCircles(
+                {hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius,
+                {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y}, enemy.hitCircle.radius
+            )) {
                 health -= enemy.damage;
                 tookDamage = true;
                 break;
@@ -162,8 +168,8 @@ void Player::Receive(std::vector<Enemy> &enemies) {
         }
 
         if (tookDamage) {
-            iframesReady = false;
-            iframeTimer = iframes;
+            m_iframesReady = false;
+            m_iframeTimer = m_iframes;
 
             // knockback all enemies on hit
             for (Enemy &enemy : enemies) {
@@ -184,21 +190,30 @@ void Player::Receive(std::vector<Enemy> &enemies) {
 void Player::Update(std::vector<Enemy> &enemies) {
     const float delta = GetFrameTime();
 
-    animManager.Update();
+    m_animManager.Update();
 
-    cursorPos = GetScreenToWorld2D(GetMousePosition(), camera);
+    m_cursorPos = GetScreenToWorld2D(GetMousePosition(), camera);
 
-    atkActiveTimer -= delta;
-    atkCooldownTimer -= delta;
+    m_atkActiveTimer -= delta;
+    m_atkCooldownTimer -= delta;
 
-    if (atkCooldownTimer <= 0.0f) {
-        atkReady = true;
+    if (m_atkCooldownTimer <= 0.0f) {
+        m_atkReady = true;
     }
 
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && atkReady) {
-        atkActiveTimer = atkDuration;
-        atkCooldownTimer = atkDuration + atkCooldown;
-        atkReady = false;
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && m_atkReady) {
+        m_atkActiveTimer = m_atkDuration;
+        m_atkCooldownTimer = m_atkDuration + m_atkCooldown;
+        m_atkReady = false;
+        ChangeAnimation(AnimState::ATTACK);
+    }
+
+    if (m_atkActiveTimer <= 0.0f) {
+        if (m_moving) {
+            ChangeAnimation(AnimState::RUN);
+        } else {
+            ChangeAnimation(AnimState::IDLE);
+        }
     }
 
     Attack(enemies);
@@ -206,29 +221,38 @@ void Player::Update(std::vector<Enemy> &enemies) {
 }
 
 void Player::Draw() {
-    DrawCircleV(cursorPos, 5.0f, RED);
+    DrawCircleV(m_cursorPos, 5.0f, RED);
 
-    const Vector2 direction = Vector2Subtract(cursorPos, pos);
+    const Vector2 direction = Vector2Subtract(m_cursorPos, pos);
     const float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
 
-    if (atkActiveTimer > 0.0f) {
-        DrawCircleLines(atkCircle.pos.x, atkCircle.pos.y, atkCircle.radius, RED);
-
-        Vector2 txtOrigin = {(float)atkTexture.width / 2.0f, (float)atkTexture.height / 2.0f};
-        Rectangle destRec = {atkCircle.pos.x, atkCircle.pos.y, (float)atkTexture.width, (float)atkTexture.height};
-        DrawTexturePro(atkTexture, Rectangle{0.0f, 0.0f, (float)atkTexture.width, (float)atkTexture.height}, destRec,
-                       txtOrigin, rotation, WHITE);
+    if (m_atkActiveTimer > 0.0f) {
+        const Vector2 txtOrigin = {
+            static_cast<float>(m_atkTexture.width) / 2.0f,
+            static_cast<float>(m_atkTexture.height) / 2.0f
+        };
+        const Rectangle destRec = {
+            m_atkCircle.pos.x, m_atkCircle.pos.y,
+            static_cast<float>(m_atkTexture.width),
+            static_cast<float>(m_atkTexture.height)
+        };
+        DrawTexturePro(
+            m_atkTexture,
+            Rectangle{0.0f, 0.0f, static_cast<float>(m_atkTexture.width), static_cast<float>(m_atkTexture.height)},
+            destRec,
+            txtOrigin,
+            rotation,
+            WHITE
+        );
     }
 
-    DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, GREEN);
-
-    const bool flipSprite = (lastDir.x < 0.0f);
-    animManager.Draw(pos, flipSprite);
+    const bool flipSprite = (m_lastDir.x < 0.0f);
+    m_animManager.Draw(pos, flipSprite);
 }
 
 void Player::ChangeAnimation(const AnimState newState) {
     if (currentAnimState != newState) {
         currentAnimState = newState;
-        animManager.Play(newState);
+        m_animManager.Play(newState);
     }
 }

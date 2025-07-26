@@ -17,6 +17,7 @@ add_executable(Dimentia
     src/GUI.cpp
     src/SpatialGrid.cpp
     src/Globals.cpp
+    src/Weapon.cpp
 )
 
 target_link_libraries(Dimentia PRIVATE raylib)
