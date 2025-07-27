@@ -58,10 +58,10 @@ void SpatialGrid::Draw() const {
 }
 
 std::tuple<int, int, int, int> SpatialGrid::GetCellRange(const Enemy *enemy) const {
-    const float left = enemy->pos.x - enemy->width / 2;
-    const float right = enemy->pos.x + enemy->width / 2;
-    const float top = enemy->pos.y - enemy->height / 2;
-    const float bottom = enemy->pos.y + enemy->height / 2;
+    const float left = enemy->GetPos().x - enemy->width / 2;
+    const float right = enemy->GetPos().x + enemy->width / 2;
+    const float top = enemy->GetPos().y - enemy->height  / 2;
+    const float bottom = enemy->GetPos().y + enemy->height / 2;
 
     int minX = std::max(0, static_cast<int>(left / cellSize));
     int maxX = std::min(gridWidth - 1, static_cast<int>(right / cellSize));
@@ -95,10 +95,10 @@ std::vector<Enemy *> SpatialGrid::GetNeighboursInRadius(const Enemy *enemy, cons
     std::vector<Enemy *> neighbours;
     std::unordered_set<Enemy *> uniqueNeighbours;
 
-    const float left = enemy->pos.x - radius;
-    const float right = enemy->pos.x + radius;
-    const float top = enemy->pos.y - radius;
-    const float bottom = enemy->pos.y + radius;
+    const float left = enemy->GetPos().x - radius;
+    const float right = enemy->GetPos().x + radius;
+    const float top = enemy->GetPos().y - radius;
+    const float bottom = enemy->GetPos().y + radius;
 
     const int minX = std::max(0, static_cast<int>(left / cellSize));
     const int maxX = std::min(gridWidth - 1, static_cast<int>(right / cellSize));
@@ -121,8 +121,8 @@ std::vector<Enemy *> SpatialGrid::GetNeighbours(const Enemy *enemy) const {
     std::vector<Enemy *> nearby;
     std::unordered_set<Enemy *> uniqueEnemies;
 
-    const int x = static_cast<int>(enemy->pos.x / cellSize);
-    const int y = static_cast<int>(enemy->pos.y / cellSize);
+    const int x = static_cast<int>(enemy->GetPos().x / cellSize);
+    const int y = static_cast<int>(enemy->GetPos().y / cellSize);
 
     for (int dy = -1; dy <= 1; dy++) {
         for (int dx = -1; dx <= 1; dx++) {

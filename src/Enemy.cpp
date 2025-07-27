@@ -14,7 +14,7 @@ void Enemy::Init() {
     texture = textures.abominableMassTexture;
 
     speed = 80.0f;
-    velocity = {0.0f, 0.0f};
+    vel = {0.0f, 0.0f};
     knockbackVelocity = {0.0f, 0.0f};
     knockbackResistance = 0.2f;
 
@@ -28,11 +28,10 @@ void Enemy::Init() {
     iframeTimer = iframes;
     iframesReady = true;
 
-    gridCells.clear();
+    // gridCells.clear();
 }
 
 void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
-
     for (Enemy *other : nearbyEnemies) {
         constexpr float minDistance = 16.0f;
 
@@ -56,14 +55,25 @@ void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
     }
 }
 
-void Enemy::Move(const Player &player) {
+void Enemy::Move(const Player & player) {
     const float delta = GetFrameTime();
 
-    const Vector2 playerCenter = {player.pos.x + player.width / 2.0f, player.pos.y + player.height / 2.0f};
-    const Vector2 enemyCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
+    const Vector2 playerCenter = {
+        player.GetPos().x + player.width / 2.0f,
+        player.GetPos().y + player.height / 2.0f
+    };
+
+    const Vector2 enemyCenter = {
+        pos.x + width / 2.0f,
+        pos.y + height / 2.0f
+    };
+
     dir = Vector2Normalize(Vector2Subtract(playerCenter, enemyCenter));
 
-    const Vector2 movement = {dir.x * speed * delta, dir.y * speed * delta};
+    const Vector2 movement = {
+        dir.x * speed * delta,
+        dir.y * speed * delta
+    };
 
     pos.x += movement.x;
     pos.y += movement.y;
@@ -99,7 +109,7 @@ void Enemy::Die() {
     }
 }
 
-void Enemy::Update(const SpatialGrid &grid) {
+void Enemy::Update() {
     const float delta = GetFrameTime();
 
     if (!iframesReady) {
@@ -116,8 +126,8 @@ void Enemy::Update(const SpatialGrid &grid) {
         knockbackVelocity = Vector2Zero();
     }
 
-    const std::vector<Enemy *> nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
-    Avoid(nearbyEnemies);
+    // const std::vector<Enemy *> nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
+    // Avoid(nearbyEnemies);
 
     hitCircle.pos.x = pos.x + width / 2.0f;
     hitCircle.pos.y = pos.y + height / 2.0f;

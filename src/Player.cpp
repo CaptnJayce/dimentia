@@ -128,10 +128,10 @@ void Player::Attack(std::vector<Enemy> &enemies) {
 
     for (int i = 0; i < enemies.size();) {
         Enemy &enemy = enemies[i];
-        if (CheckCollisionCircles(weaponPosition, atkCircle.radius, {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y},
-                                  enemy.hitCircle.radius)) {
+        if (CheckCollisionCircles(weaponPosition, atkCircle.radius, {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y},
+                                  enemy.GetHitCircle().radius)) {
             enemy.Receive(pos, atkCircle, knockback, damage);
-            if (enemy.health <= 0.0f) {
+            if (enemy.GetHealth() <= 0.0f) {
                 enemies.erase(enemies.begin() + i);
                 continue;
             }
@@ -153,21 +153,27 @@ void Player::Receive(std::vector<Enemy> &enemies) {
     if (iframesReady) {
         bool tookDamage = false;
         for (const Enemy &enemy : enemies) {
-            if (CheckCollisionCircles({hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius,
-                                      {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y}, enemy.hitCircle.radius)) {
-                health -= enemy.damage;
+            if (CheckCollisionCircles(
+                {hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius,
+                {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y},
+                enemy.GetHitCircle().radius
+            )) {
+                health -= enemy.GetDamage();
                 tookDamage = true;
                 break;
             }
         }
 
+
         if (tookDamage) {
             iframesReady = false;
             iframeTimer = iframes;
 
-            // knockback all enemies on hit
             for (Enemy &enemy : enemies) {
-                const Vector2 enemyCenter = {enemy.hitCircle.pos.x, enemy.hitCircle.pos.y};
+                const Vector2 enemyCenter = {
+                    enemy.GetHitCircle().pos.x,
+                    enemy.GetHitCircle().pos.y
+                };
                 const Vector2 playerCenter = {hitCircle.pos.x, hitCircle.pos.y};
                 Vector2 direction = Vector2Subtract(enemyCenter, playerCenter);
 
@@ -175,13 +181,14 @@ void Player::Receive(std::vector<Enemy> &enemies) {
                     direction = Vector2Normalize(direction);
                 }
 
-                enemy.knockbackVelocity = Vector2Scale(direction, knockback * 0.5f);
+                enemy.SetKnockbackVelocity(Vector2Scale(direction, knockback * 0.5f));
             }
         }
+
     }
 }
 
-void Player::Update(std::vector<Enemy> &enemies) {
+void Player::Update() {
     const float delta = GetFrameTime();
 
     animManager.Update();

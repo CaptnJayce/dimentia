@@ -22,12 +22,13 @@ int main() {
     float cellSize = 25.0f;
     SpatialGrid grid(screenWidth, screenHeight, cellSize);
 
-    float randValue;
-    float anotherRandValue;
     for (int i = 0; i < 10; i++) {
         Enemy e;
         e.Init();
-        e.pos = {randValue = GetRandomValue(-100, 100), anotherRandValue = GetRandomValue(-100, 100)};
+        e.SetPos(
+            static_cast<float>(GetRandomValue(-100, 100)),
+            static_cast<float>(GetRandomValue(-100, 100))
+        );
         enemies.push_back(e);
         grid.Insert(&enemies.back());
     }
@@ -41,11 +42,11 @@ int main() {
         grid.Clear();
         for (Enemy &enemy : enemies) {
             enemy.Move(p);
-            enemy.Update(grid);
+            enemy.Update();
             grid.Insert(&enemy);
         }
 
-        p.Update(enemies);
+        p.Update();
 
         if (IsKeyPressed(KEY_ONE)) {
             ui.LoadScene(UI::MainMenu);
@@ -56,9 +57,9 @@ int main() {
         ui.Update();
 
         for (auto it = enemies.begin(); it != enemies.end();) {
-            if (it->health <= 0.0f) {
+            if (it->GetHealth()<= 0.0f) {
                 grid.Remove(&(*it));
-                UnloadTexture(it->texture);
+                UnloadTexture(it->GetTexture());
                 it = enemies.erase(it);
             } else {
                 ++it;
@@ -83,7 +84,7 @@ int main() {
     }
 
     for (Enemy &enemy : enemies) {
-        UnloadTexture(enemy.texture);
+        UnloadTexture(enemy.GetTexture());
     }
     CloseWindow();
     return 0;

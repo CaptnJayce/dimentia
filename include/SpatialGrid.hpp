@@ -2,6 +2,8 @@
 #include "./Enemy.hpp"
 #include <vector>
 
+class Enemy;
+
 class SpatialGrid {
   private:
     float cellSize;
