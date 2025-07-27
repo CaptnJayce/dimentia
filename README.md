@@ -1,2 +1,3 @@
-# Kalpa Chaos
-game
+# Dimentia
+
+Vampire Survivors style game thing
