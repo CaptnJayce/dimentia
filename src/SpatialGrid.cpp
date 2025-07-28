@@ -1,7 +1,10 @@
 #include "../include/SpatialGrid.hpp"
+#include "../include/Globals.hpp"
 #include <algorithm>
 #include <cmath>
 #include <unordered_set>
+
+SpatialGrid grid(screenWidth, screenHeight, cellSize);
 
 SpatialGrid::SpatialGrid(const float gameWidth, const float gameHeight, const float cellSize)
     : cellSize(cellSize), gridWidth(static_cast<int>(std::ceil(gameWidth / cellSize))),

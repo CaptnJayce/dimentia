@@ -1,9 +1,13 @@
 #pragma once
 #include "./AnimationManager.hpp"
-#include "./Globals.hpp"
 
 #include <raylib.h>
 #include <vector>
+
+struct Circle {
+    Vector2 pos;
+    float radius;
+};
 
 class Enemy;
 class Player;

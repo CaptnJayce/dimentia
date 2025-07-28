@@ -1,5 +1,6 @@
 #include "../include/Enemy.hpp"
 #include "../include/Player.hpp"
+#include "../include/Globals.hpp"
 #include "../include/SpatialGrid.hpp"
 #include <raylib.h>
 #include <raymath.h>
@@ -28,7 +29,7 @@ void Enemy::Init() {
     iframeTimer = iframes;
     iframesReady = true;
 
-    // gridCells.clear();
+    gridCells.clear();
 }
 
 void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
@@ -101,7 +102,7 @@ void Enemy::Receive(const Vector2 source, Circle damageSource, const float knock
 void Enemy::Die() {
     for (auto it = enemies.begin(); it != enemies.end();) {
         if (it->health <= 0.0f) {
-            UnloadTexture((*it).texture);
+            UnloadTexture(it->texture);
             it = enemies.erase(it);
         } else {
             ++it;
@@ -126,8 +127,8 @@ void Enemy::Update() {
         knockbackVelocity = Vector2Zero();
     }
 
-    // const std::vector<Enemy *> nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
-    // Avoid(nearbyEnemies);
+    const std::vector<Enemy *> nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
+    Avoid(nearbyEnemies);
 
     hitCircle.pos.x = pos.x + width / 2.0f;
     hitCircle.pos.y = pos.y + height / 2.0f;

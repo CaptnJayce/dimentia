@@ -6,9 +6,6 @@
 #include <raylib.h>
 
 int main() {
-    constexpr int screenWidth = 1920;
-    constexpr int screenHeight = 1080;
-
     SetTargetFPS(120);
     InitWindow(screenWidth, screenHeight, "Dimentia");
 
@@ -18,9 +15,6 @@ int main() {
     p.Init();
 
     UI ui(p);
-
-    constexpr float cellSize = 25.0f;
-    SpatialGrid grid(screenWidth, screenHeight, cellSize);
 
     for (int i = 0; i < 10; i++) {
         Enemy e;

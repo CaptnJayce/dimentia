@@ -1,5 +1,4 @@
 #pragma once
-#include "./Globals.hpp"
 #include "./Entity.hpp"
 
 #include <raylib.h>

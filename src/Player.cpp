@@ -1,6 +1,7 @@
 #include "../include/Player.hpp"
 #include "../include/AnimationManager.hpp"
 #include "../include/Enemy.hpp"
+#include "../include/Globals.hpp"
 #include <algorithm>
 #include <raylib.h>
 #include <raymath.h>

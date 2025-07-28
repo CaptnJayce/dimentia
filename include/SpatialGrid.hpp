@@ -5,7 +5,7 @@
 class Enemy;
 
 class SpatialGrid {
-  private:
+  public:
     float cellSize;
     int gridWidth;
     int gridHeight;
@@ -15,7 +15,6 @@ class SpatialGrid {
 
     std::tuple<int, int, int, int> GetCellRange(const Enemy *enemy) const;
 
-  public:
     SpatialGrid(float gameWidth, float gameHeight, float cellSize);
 
     void Clear();
@@ -28,3 +27,5 @@ class SpatialGrid {
     std::vector<Enemy *> GetPotentialCollisions(const Enemy *enemy) const;
     std::vector<Enemy *> GetNeighboursInRadius(const Enemy *enemy, float radius) const;
 };
+
+extern SpatialGrid grid;
