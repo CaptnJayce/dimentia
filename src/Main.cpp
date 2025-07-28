@@ -6,11 +6,11 @@
 #include <raylib.h>
 
 int main() {
-    int screenWidth = 1920;
-    int screenHeight = 1080;
+    constexpr int screenWidth = 1920;
+    constexpr int screenHeight = 1080;
 
     SetTargetFPS(120);
-    InitWindow(screenWidth, screenHeight, "Kalpa: Chaos");
+    InitWindow(screenWidth, screenHeight, "Dimentia");
 
     InitTextures();
 
@@ -19,7 +19,7 @@ int main() {
 
     UI ui(p);
 
-    float cellSize = 25.0f;
+    constexpr float cellSize = 25.0f;
     SpatialGrid grid(screenWidth, screenHeight, cellSize);
 
     for (int i = 0; i < 10; i++) {
@@ -34,8 +34,6 @@ int main() {
     }
 
     while (!WindowShouldClose()) {
-        float delta = GetFrameTime();
-
         // Update
         p.Move();
 
