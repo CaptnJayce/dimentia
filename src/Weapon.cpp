@@ -6,31 +6,49 @@
 #include <raylib.h>
 
 void Weapon::Init() {
-    damage = 5.0f;
+    baseDamage = 5.0f;
+    damage = baseDamage;
+    bonusDamage = 10.0f;
     atkSpeed = 100.0f;
-    atkCooldown = 0.5f;
-    atkDuration = 0.5f;
+    atkCooldown = 0.1f;
+    atkDuration = 0.3f;
     atkActiveTimer = 0.0f;
     atkCooldownTimer = 0.0f;
     atkReady = true;
-    knockback = 500.0f;
+    knockback = 250.0f;
     weaponRadius = 8.0f;
-    weaponDistance = 15.0f;
+    weaponDistance = 30.0f;
+    atkCounter = 0;
+    maxCounter = 3;
     atkTexture = textures.huskOneWeaponTexture;
 }
 
 void Weapon::Attack(std::vector<Enemy> &enemies) {
     if (atkActiveTimer <= 0.0f) {
+        if (finalAtk) {
+            damage = baseDamage;
+            finalAtk = false;
+        }
         return;
     }
 
-    const Vector2 direction = Vector2Subtract(cursorPos, pos);
-    const Vector2 normalized = Vector2Normalize(direction);
+    Vector2 weaponPosition;
 
-    const Vector2 weaponPosition = {
-        pos.x + normalized.x * weaponDistance,
-        pos.y + normalized.y * weaponDistance
-    };
+    if (finalAtk) {
+        spinSpeed = 40.0f;
+        spinAngle += spinSpeed * GetFrameTime();
+        weaponPosition = {
+            pos.x + cosf(spinAngle) * weaponDistance,
+            pos.y + sinf(spinAngle) * weaponDistance
+        };
+    } else {
+        const Vector2 direction = Vector2Subtract(cursorPos, pos);
+        const Vector2 normalized = Vector2Normalize(direction);
+        weaponPosition = {
+            pos.x + normalized.x * weaponDistance,
+            pos.y + normalized.y * weaponDistance
+        };
+    }
 
     atkCircle.pos = weaponPosition;
 
@@ -51,15 +69,23 @@ void Weapon::Attack(std::vector<Enemy> &enemies) {
 }
 
 void Weapon::Draw() {
-    const Vector2 direction = Vector2Subtract(cursorPos, pos);
-    const float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
+    float rotation;
+    Vector2 weaponPosition;
+
+    if (finalAtk) {
+        weaponPosition = atkCircle.pos;
+        rotation = spinAngle * RAD2DEG;
+    } else {
+        const Vector2 direction = Vector2Subtract(cursorPos, pos);
+        rotation = atan2f(direction.y, direction.x) * RAD2DEG;
+        weaponPosition = atkCircle.pos;
+    }
 
     if (atkActiveTimer > 0.0f) {
-        DrawCircleLines(atkCircle.pos.x, atkCircle.pos.y, atkCircle.radius, RED);
+        DrawCircleLines(weaponPosition.x, weaponPosition.y, atkCircle.radius, RED);
 
-        // good lord
         const Vector2 txtOrigin = {static_cast<float>(atkTexture.width) / 2.0f, static_cast<float>(atkTexture.height) / 2.0f};
-        const Rectangle destRec = {atkCircle.pos.x, atkCircle.pos.y, static_cast<float>(atkTexture.width), static_cast<float>(atkTexture.height)};
+        const Rectangle destRec = {weaponPosition.x, weaponPosition.y, static_cast<float>(atkTexture.width), static_cast<float>(atkTexture.height)};
         DrawTexturePro(atkTexture, Rectangle{0.0f, 0.0f, static_cast<float>(atkTexture.width), static_cast<float>(atkTexture.height)}, destRec,
                        txtOrigin, rotation, WHITE);
     }
@@ -88,10 +114,23 @@ void Weapon::Update(const Player& player) {
         atkReady = true;
     }
 
+    // apply cooldown at end of combo
+    if (atkCounter == maxCounter) {
+        atkCooldownTimer += 1.0f;
+        atkCounter = 0;
+    }
+
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && atkReady) {
+        atkCounter += 1;
         atkActiveTimer = atkDuration;
         atkCooldownTimer = atkDuration + atkCooldown;
         atkReady = false;
+
+        if (atkCounter == 3) {
+            finalAtk = true;
+            spinAngle = -PI/2;
+            damage = baseDamage + bonusDamage;
+        }
     }
 
     Attack(enemies);

@@ -72,11 +72,18 @@ protected:
     float friction{};
 
     float damage{};
+    float baseDamage{};
+    float bonusDamage{};
     float atkSpeed{};
     float atkCooldown{};
     float atkDuration{};
     float atkActiveTimer{};
     float atkCooldownTimer{};
+    int atkCounter{};
+    int maxCounter{};
+    float spinAngle{};
+    float spinSpeed{};
+    bool finalAtk{};
     bool atkReady{};
 
     float knockback{};
