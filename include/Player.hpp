@@ -1,23 +1,16 @@
 #pragma once
-#include "./AnimationManager.hpp"
-#include "./Entity.hpp"
-
-#include <vector>
+#include "./Weapon.hpp"
 
 class Enemy;
 
 class Player final : public Entity {
   public:
+    Weapon weapon;
+
     void Init() override;
     void ChangeAnimation(AnimState newState) override;
     void Move();
-    void Attack(std::vector<Enemy> &enemies);
-    void Receive(std::vector<Enemy> &enemies);
-    void Update();
+    void Receive(std::vector<Enemy> &enemies) override;
+    void Update() override;
     void Draw() override;
-
-    Camera2D camera{};
-    float zoom{};
-    float offset{};
-    Vector2 target{};
 };

@@ -13,7 +13,7 @@ class Enemy final : public Entity {
     std::unordered_set<int> gridCells;
 
     void Init() override;
-    void Move(const Player & player);
+    void Move(const Player& player);
     void Receive(Vector2 source, Circle damageSource, float knockback, float damage);
     void Die() override;
     void Update() override;

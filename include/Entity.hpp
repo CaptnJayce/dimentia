@@ -33,6 +33,11 @@ public:
     float width{};
     float height{};
 
+    Camera2D camera{};
+    float zoom{};
+    float offset{};
+    Vector2 target{};
+
     // getters
     const Circle& GetHitCircle() const { return hitCircle; }
     void SetKnockbackVelocity(const Vector2 vel) { knockbackVelocity = vel; }
@@ -51,6 +56,7 @@ protected:
     Vector2 cursorPos{};
     Vector2 dir{};
     Vector2 lastDir{};
+    Vector2 center{};
 
     Circle hitCircle{};
     Circle atkCircle{};

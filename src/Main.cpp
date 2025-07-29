@@ -1,4 +1,3 @@
-#include "../include/Enemy.hpp"
 #include "../include/GUI.hpp"
 #include "../include/Globals.hpp"
 #include "../include/Player.hpp"
@@ -12,16 +11,18 @@ int main() {
     InitTextures();
 
     Player p;
+    Weapon w;
     p.Init();
+    w.Init();
 
     UI ui(p);
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
         Enemy e;
         e.Init();
         e.SetPos(
-            static_cast<float>(GetRandomValue(-100, 100)),
-            static_cast<float>(GetRandomValue(-100, 100))
+            static_cast<float>(GetRandomValue(0, 1000)),
+            static_cast<float>(GetRandomValue(0, 1000))
         );
         enemies.push_back(e);
         grid.Insert(&enemies.back());
@@ -39,6 +40,7 @@ int main() {
         }
 
         p.Update();
+        w.Update(p);
 
         if (IsKeyPressed(KEY_ONE)) {
             ui.LoadScene(UI::MainMenu);
@@ -64,11 +66,12 @@ int main() {
         ClearBackground({25, 23, 36, 255});
 
         p.Draw();
+        w.Draw();
         for (Enemy &enemy : enemies) {
             enemy.Draw();
         }
 
-        grid.Draw();
+        // grid.Draw();
 
         EndMode2D();
         ui.Draw();

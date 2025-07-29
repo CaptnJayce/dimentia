@@ -1,17 +1,19 @@
 #include "../include/Player.hpp"
 #include "../include/AnimationManager.hpp"
 #include "../include/Enemy.hpp"
-#include "../include/Globals.hpp"
+#include "../include/Weapon.hpp"
 #include <algorithm>
 #include <raylib.h>
 #include <raymath.h>
 
 void Player::Init() {
+    weapon = Weapon();
+
     animManager.AddAnimation(AnimState::IDLE, "../sprites/s_HuskOneIdle.png", 19, 0.1f, true);
     animManager.AddAnimation(AnimState::RUN, "../sprites/s_HuskOneRun.png", 6, 0.1f, true);
     currentAnimState = AnimState::IDLE;
 
-    pos = {100.0f, 100.0f};
+    pos = {0.0f, 0.0f};
     dir = {0.0f, 0.0f};
     lastDir = {0.0f, 0.0f};
     cursorPos = {0.0f, 0.0f};
@@ -28,17 +30,7 @@ void Player::Init() {
     maxVelocity = 100.0f;
     moving = false;
 
-    damage = 5.0f;
-    atkSpeed = 100.0f;
-    atkCooldown = 0.5f;
-    atkDuration = 0.5f;
-    atkActiveTimer = 0.0f;
-    atkCooldownTimer = 0.0f;
-    atkReady = true;
     knockback = 500.0f;
-    weaponRadius = 8.0f;
-    weaponDistance = 15.0f;
-    atkTexture = textures.huskOneWeaponTexture;
 
     health = 100.0f;
     iframes = 1.0f;
@@ -48,9 +40,8 @@ void Player::Init() {
     width = 10.0f;
     height = 22.0f;
 
-    const Vector2 center = {pos.x + width / 2.0f, pos.y + height / 2.0f};
+    center = {pos.x + width / 2.0f, pos.y + height / 2.0f};
     hitCircle = {center.x, center.y, 8.0f};
-    atkCircle = {center.x, center.y, weaponRadius};
 
     camera = {0};
     camera.target = pos;
@@ -112,35 +103,6 @@ void Player::Move() {
     camera.target = Vector2Lerp(camera.target, pos, 20.0f * delta);
 }
 
-void Player::Attack(std::vector<Enemy> &enemies) {
-    if (atkActiveTimer <= 0.0f) {
-        return;
-    }
-
-    const Vector2 playerCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
-    const Vector2 direction = Vector2Subtract(cursorPos, playerCenter);
-    const Vector2 normalized = Vector2Normalize(direction);
-
-    const Vector2 weaponPosition = {playerCenter.x + normalized.x * weaponDistance,
-                              playerCenter.y + normalized.y * weaponDistance};
-
-    atkCircle.pos.x = weaponPosition.x;
-    atkCircle.pos.y = weaponPosition.y;
-
-    for (int i = 0; i < enemies.size();) {
-        Enemy &enemy = enemies[i];
-        if (CheckCollisionCircles(weaponPosition, atkCircle.radius, {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y},
-                                  enemy.GetHitCircle().radius)) {
-            enemy.Receive(pos, atkCircle, knockback, damage);
-            if (enemy.GetHealth() <= 0.0f) {
-                enemies.erase(enemies.begin() + i);
-                continue;
-            }
-        }
-        i++;
-    }
-}
-
 void Player::Receive(std::vector<Enemy> &enemies) {
     const float delta = GetFrameTime();
 
@@ -190,46 +152,12 @@ void Player::Receive(std::vector<Enemy> &enemies) {
 }
 
 void Player::Update() {
-    const float delta = GetFrameTime();
-
     animManager.Update();
 
-    cursorPos = GetScreenToWorld2D(GetMousePosition(), camera);
-
-    atkActiveTimer -= delta;
-    atkCooldownTimer -= delta;
-
-    if (atkCooldownTimer <= 0.0f) {
-        atkReady = true;
-    }
-
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && atkReady) {
-        atkActiveTimer = atkDuration;
-        atkCooldownTimer = atkDuration + atkCooldown;
-        atkReady = false;
-    }
-
-    Attack(enemies);
     Receive(enemies);
 }
 
 void Player::Draw() {
-    DrawCircleV(cursorPos, 5.0f, RED);
-
-    const Vector2 direction = Vector2Subtract(cursorPos, pos);
-    const float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
-
-    if (atkActiveTimer > 0.0f) {
-        DrawCircleLines(atkCircle.pos.x, atkCircle.pos.y, atkCircle.radius, RED);
-
-        Vector2 txtOrigin = {(float)atkTexture.width / 2.0f, (float)atkTexture.height / 2.0f};
-        Rectangle destRec = {atkCircle.pos.x, atkCircle.pos.y, (float)atkTexture.width, (float)atkTexture.height};
-        DrawTexturePro(atkTexture, Rectangle{0.0f, 0.0f, (float)atkTexture.width, (float)atkTexture.height}, destRec,
-                       txtOrigin, rotation, WHITE);
-    }
-
-    DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, GREEN);
-
     const bool flipSprite = (lastDir.x < 0.0f);
     animManager.Draw(pos, flipSprite);
 }

@@ -56,7 +56,7 @@ void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
     }
 }
 
-void Enemy::Move(const Player & player) {
+void Enemy::Move(const Player& player) {
     const float delta = GetFrameTime();
 
     const Vector2 playerCenter = {
@@ -135,8 +135,8 @@ void Enemy::Update() {
 }
 
 void Enemy::Draw() const {
-    DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, RED);
+    // DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, RED);
 
-    const Rectangle srcRect = {0.0f, 0.0f, (float)texture.width, (float)texture.height};
+    const Rectangle srcRect = {0.0f, 0.0f, static_cast<float>(texture.width), static_cast<float>(texture.height)};
     DrawTextureRec(texture, srcRect, pos, RAYWHITE);
 }
