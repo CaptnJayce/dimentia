@@ -15,7 +15,7 @@ int main() {
     p.Init();
     w.Init();
 
-    UI ui(p);
+    UI ui(p, w);
 
     for (int i = 0; i < 100; i++) {
         Enemy e;

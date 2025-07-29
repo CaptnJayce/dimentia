@@ -41,10 +41,18 @@ public:
     // getters
     const Circle& GetHitCircle() const { return hitCircle; }
     void SetKnockbackVelocity(const Vector2 vel) { knockbackVelocity = vel; }
-    float GetDamage() const { return damage; }
-    float GetHealth() const { return health; }
+
     Vector2 GetPos() const { return pos; }
     void SetPos(const float x, const float y) { pos = {x, y}; }
+
+    float GetDamage() const { return damage; }
+    float GetHealth() const { return health; }
+    float GetSpeed() const { return speed; }
+    float GetDashSpeed() const { return dashSpeed; }
+    bool GetDashReady() const { return dashReady; }
+    int GetAtkCounter() const { return atkCounter; }
+    bool GetIfFramesReady() const { return iframesReady; }
+
     Texture GetTexture() const { return texture; }
 
 protected:

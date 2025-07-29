@@ -23,7 +23,7 @@ void Enemy::Init() {
     height = 13.0f;
     hitCircle = {pos.x + width / 2.0f, pos.y + height / 2.0f, 8.0f};
 
-    damage = 10.0f;
+    damage = 1.0f;
     health = 10.0f;
     iframes = 1.0f;
     iframeTimer = iframes;

@@ -32,7 +32,7 @@ void Player::Init() {
 
     knockback = 500.0f;
 
-    health = 100.0f;
+    health = 5.0f;
     iframes = 1.0f;
     iframeTimer = iframes;
     iframesReady = true;
