@@ -23,7 +23,7 @@ void Weapon::Init() {
     atkTexture = textures.huskOneWeaponTexture;
 }
 
-void Weapon::Attack(std::vector<Enemy> &enemies) {
+void Weapon::Attack(std::vector<Enemy> &enemies, Player &player) {
     if (atkActiveTimer <= 0.0f) {
         if (finalAtk) {
             damage = baseDamage;
@@ -58,11 +58,7 @@ void Weapon::Attack(std::vector<Enemy> &enemies) {
             {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y},
             enemy.GetHitCircle().radius
         )) {
-            enemy.Receive(pos, atkCircle, knockback, damage);
-            if (enemy.GetHealth() <= 0.0f) {
-                enemies.erase(enemies.begin() + i);
-                continue;
-            }
+            enemy.Receive(pos, knockback, damage, player);
         }
         i++;
     }
@@ -94,7 +90,7 @@ void Weapon::Draw() {
     animManager.Draw(pos, flipSprite);
 }
 
-void Weapon::Update(const Player& player) {
+void Weapon::Update(Player &player) {
     const float delta = GetFrameTime();
     cursorPos = GetScreenToWorld2D(GetMousePosition(), player.camera);
 
@@ -133,5 +129,5 @@ void Weapon::Update(const Player& player) {
         }
     }
 
-    Attack(enemies);
+    Attack(enemies, player);
 }

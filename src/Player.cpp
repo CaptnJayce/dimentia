@@ -18,6 +18,11 @@ void Player::Init() {
     lastDir = {0.0f, 0.0f};
     cursorPos = {0.0f, 0.0f};
 
+    level = 0;
+    expTotal = 0.0f;
+    // TODO: implement formula for handling level up threshold
+    expThreshold = 100.0f;
+
     speed = 10.0f;
     dashSpeed = 300.0f;
     dashDur = 0.2f;

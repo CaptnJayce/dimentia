@@ -49,6 +49,7 @@ void UI::Update() {
     dashReady = m_player.GetDashReady();
     atkCounter = m_weapon.GetAtkCounter();
     iframesReady = m_player.GetIfFramesReady();
+    expTotal = m_player.GetExperience();
 }
 
 void UI::Draw() {
@@ -72,8 +73,9 @@ void UI::InitGameUI() {
         DrawText(TextFormat("Speed %f", speed), 10, 90, 20, YELLOW);
         DrawText(TextFormat("Dash %f", dashSpeed), 10, 110, 20, GREEN);
         DrawText(TextFormat("Dash Ready %b", dashReady), 10, 130, 20, BLUE);
-        DrawText(TextFormat("Counter %d", atkCounter), 10, 150, 20, BLUE);
-        DrawText(TextFormat("IFrames Ready %b", iframesReady), 10, 170, 20, VIOLET);
+        DrawText(TextFormat("Counter %d", atkCounter), 10, 150, 20, VIOLET);
+        DrawText(TextFormat("IFrames Ready %b", iframesReady), 10, 170, 20, RED);
+        DrawText(TextFormat("Total Exp %f", expTotal), 10, 190, 20, ORANGE);
     };
 
     m_updateFunctions[Game] = []() {};

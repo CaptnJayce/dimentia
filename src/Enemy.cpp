@@ -1,7 +1,9 @@
 #include "../include/Enemy.hpp"
 #include "../include/Player.hpp"
-#include "../include/Globals.hpp"
 #include "../include/SpatialGrid.hpp"
+
+#include <iostream>
+#include <ostream>
 #include <raylib.h>
 #include <raymath.h>
 
@@ -11,13 +13,15 @@ void Enemy::Init() {
     pos = {200.0f, 200.0f};
     dir = {0.0f, 0.0f};
 
-    // TODO: Move all textures into own Init file to prevent reuse of texture
-    texture = textures.abominableMassTexture;
+    // NOTE TO SELF: Multiple enemy instances can't share a texture as unloading it causes issues
+    texture = LoadTexture("../sprites/abominable_mass.png");
 
     speed = 80.0f;
     vel = {0.0f, 0.0f};
     knockbackVelocity = {0.0f, 0.0f};
     knockbackResistance = 0.2f;
+
+    expDrop = 10.0f;
 
     width = 28.0f;
     height = 13.0f;
@@ -83,7 +87,7 @@ void Enemy::Move(const Player& player) {
     hitCircle.pos.y = pos.y + height / 2.0f;
 }
 
-void Enemy::Receive(const Vector2 source, Circle damageSource, const float knockback, const float damage) {
+void Enemy::Receive(const Vector2 source, const float knockback, const float damage, Player &player) {
     const Vector2 enemyCenter = {hitCircle.pos.x, hitCircle.pos.y};
     Vector2 direction = Vector2Subtract(enemyCenter, source);
 
@@ -96,12 +100,14 @@ void Enemy::Receive(const Vector2 source, Circle damageSource, const float knock
         health -= damage;
         iframesReady = false;
         iframeTimer = iframes;
+        Die(player);
     }
 }
 
-void Enemy::Die() {
+void Enemy::Die(Player& player) {
     for (auto it = enemies.begin(); it != enemies.end();) {
         if (it->health <= 0.0f) {
+            player.expTotal += it->expDrop;
             UnloadTexture(it->texture);
             it = enemies.erase(it);
         } else {

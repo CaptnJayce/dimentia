@@ -11,7 +11,4 @@ float cellSize = 25.0f;
 void InitTextures() {
     // weapon textures
     textures.huskOneWeaponTexture = LoadTexture("../sprites/crescent_slash.png");
-
-    // enemy textures
-    textures.abominableMassTexture = LoadTexture("../sprites/abominable_mass.png");
 }

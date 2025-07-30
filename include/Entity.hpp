@@ -24,7 +24,7 @@ public:
     virtual void Attack(std::vector<Enemy> &enemies) {};
     virtual void Receive(std::vector<Enemy> &enemies) {};
 
-    virtual void Die() {};
+    virtual void Die(Player &player) {};
 
     virtual void Update() {};
     virtual void Draw() {};
@@ -37,6 +37,8 @@ public:
     float zoom{};
     float offset{};
     Vector2 target{};
+
+    float expTotal{};
 
     // getters
     const Circle& GetHitCircle() const { return hitCircle; }
@@ -52,6 +54,7 @@ public:
     bool GetDashReady() const { return dashReady; }
     int GetAtkCounter() const { return atkCounter; }
     bool GetIfFramesReady() const { return iframesReady; }
+    float GetExperience() const { return expTotal; }
 
     Texture GetTexture() const { return texture; }
 
@@ -78,6 +81,9 @@ protected:
 
     float speed{};
     float friction{};
+
+    int level{};
+    float expThreshold{};
 
     float damage{};
     float baseDamage{};

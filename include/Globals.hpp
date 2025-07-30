@@ -2,12 +2,10 @@
 
 #include <raylib.h>
 
+// TODO: remove this struct
 struct Textures {
     // weapon textures
     Texture huskOneWeaponTexture;
-
-    // enemy textures
-    Texture abominableMassTexture;
 };
 
 extern int screenWidth;

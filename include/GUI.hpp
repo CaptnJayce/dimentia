@@ -20,6 +20,7 @@ class UI {
     float dashSpeed;
     bool dashReady;
     bool iframesReady;
+    float expTotal;
 
     static void Init();
     void Update();

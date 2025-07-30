@@ -5,8 +5,8 @@ class Player;
 
 class Weapon final : public Entity {
   public:
-    void Attack(std::vector<Enemy> &enemies) override;
+    void Attack(std::vector<Enemy> &enemies, Player &player);
     void Init() override;
-    void Update(const Player& player);
+    void Update(Player &player);
     void Draw() override;
 };
