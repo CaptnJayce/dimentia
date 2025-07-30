@@ -2,6 +2,7 @@
 #include "../include/AnimationManager.hpp"
 #include "../include/Enemy.hpp"
 #include "../include/Weapon.hpp"
+#include "../include/Globals.hpp"
 #include <algorithm>
 #include <raylib.h>
 #include <raymath.h>
@@ -9,8 +10,8 @@
 void Player::Init() {
     weapon = Weapon();
 
-    animManager.AddAnimation(AnimState::IDLE, "../sprites/s_HuskOneIdle.png", 19, 0.1f, true);
-    animManager.AddAnimation(AnimState::RUN, "../sprites/s_HuskOneRun.png", 6, 0.1f, true);
+    animManager.AddAnimation(AnimState::IDLE, textures.crescentWitchIdleTexture, 19, 0.1f, true);
+    animManager.AddAnimation(AnimState::RUN, textures.crescentWitchRunTexture, 6, 0.1f, true);
     currentAnimState = AnimState::IDLE;
 
     pos = {0.0f, 0.0f};

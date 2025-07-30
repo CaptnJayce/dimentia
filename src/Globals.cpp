@@ -10,5 +10,9 @@ float cellSize = 25.0f;
 // TODO: As game expands, I should split this up into multiple inits depending on the level loaded
 void InitTextures() {
     // weapon textures
-    textures.huskOneWeaponTexture = LoadTexture("../sprites/crescent_slash.png");
+    textures.crescentSlashTexture = LoadTexture("../sprites/CrescentSlash.png");
+
+    // player textures
+    textures.crescentWitchIdleTexture = LoadTexture("../sprites/s_CrescentWitchIdle.png");
+    textures.crescentWitchRunTexture = LoadTexture("../sprites/s_CrescentWitchRun.png");
 }

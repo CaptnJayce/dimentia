@@ -22,7 +22,7 @@ class AnimationManager {
     AnimationManager();
     //~AnimationManager();
 
-    void AddAnimation(AnimState, const char *path, int frames, float delay, bool loops);
+    void AddAnimation(AnimState state, const Texture &name, int frames, float delay, bool loops);
     void Play(AnimState state, bool forceRestart = false);
     void Update();
     void Draw(Vector2 position, bool flipX = false);

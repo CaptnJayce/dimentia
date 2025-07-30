@@ -20,7 +20,7 @@ void Weapon::Init() {
     weaponDistance = 30.0f;
     atkCounter = 0;
     maxCounter = 3;
-    atkTexture = textures.huskOneWeaponTexture;
+    atkTexture = textures.crescentSlashTexture;
 }
 
 void Weapon::Attack(std::vector<Enemy> &enemies, Player &player) {

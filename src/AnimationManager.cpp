@@ -3,10 +3,10 @@
 
 AnimationManager::AnimationManager() : currentState(AnimState::IDLE) {}
 
-void AnimationManager::AddAnimation(const AnimState state, const char *path, const int frames, const float delay,
+void AnimationManager::AddAnimation(const AnimState state, const Texture &name, const int frames, const float delay,
                                     const bool loops) {
     Animation anim{};
-    anim.sheet = LoadTexture(path);
+    anim.sheet = Texture(name);
     anim.frameCount = frames;
     anim.frameDelay = delay;
     anim.loop = loops;

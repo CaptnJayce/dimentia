@@ -2,10 +2,16 @@
 
 #include <raylib.h>
 
-// TODO: remove this struct
+// NOTE TO SELF: this is necessary for games future
+// as more weapons/character sprites get added, we'll use this struct to pick what loads depending on
+// character & weapon selection
 struct Textures {
     // weapon textures
-    Texture huskOneWeaponTexture;
+    Texture crescentSlashTexture;
+
+    // character textures
+    Texture crescentWitchIdleTexture;
+    Texture crescentWitchRunTexture;
 };
 
 extern int screenWidth;
