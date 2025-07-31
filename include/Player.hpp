@@ -13,4 +13,5 @@ class Player final : public Entity {
     void Receive(std::vector<Enemy> &enemies) override;
     void Update() override;
     void Draw() override;
+    void LevelUp();
 };

@@ -157,9 +157,18 @@ void Player::Receive(std::vector<Enemy> &enemies) {
     }
 }
 
+void Player::LevelUp() {
+    if (expTotal >= expThreshold) {
+        level += 1;
+        expThreshold += (expThreshold * 1.3);
+    }
+}
+
 void Player::Update() {
     animManager.Update();
 
+    // TODO: could move to Weapon::Attack so it isn't called every frame
+    LevelUp();
     Receive(enemies);
 }
 

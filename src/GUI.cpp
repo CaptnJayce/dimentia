@@ -50,6 +50,8 @@ void UI::Update() {
     atkCounter = m_weapon.GetAtkCounter();
     iframesReady = m_player.GetIfFramesReady();
     expTotal = m_player.GetExperience();
+    level = m_player.GetLevel();
+    threshold = m_player.GetThreshold();
 }
 
 void UI::Draw() {
@@ -76,6 +78,8 @@ void UI::InitGameUI() {
         DrawText(TextFormat("Counter %d", atkCounter), 10, 150, 20, VIOLET);
         DrawText(TextFormat("IFrames Ready %b", iframesReady), 10, 170, 20, RED);
         DrawText(TextFormat("Total Exp %f", expTotal), 10, 190, 20, ORANGE);
+        DrawText(TextFormat("Level %d", level), 10, 210, 20, YELLOW);
+        DrawText(TextFormat("Threshold %f", threshold), 10, 230, 20, GREEN);
     };
 
     m_updateFunctions[Game] = []() {};

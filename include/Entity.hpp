@@ -55,6 +55,8 @@ public:
     int GetAtkCounter() const { return atkCounter; }
     bool GetIfFramesReady() const { return iframesReady; }
     float GetExperience() const { return expTotal; }
+    int GetLevel() const { return level; }
+    double GetThreshold() const { return expThreshold; }
 
     Texture GetTexture() const { return texture; }
 
@@ -83,7 +85,7 @@ protected:
     float friction{};
 
     int level{};
-    float expThreshold{};
+    double expThreshold{};
 
     float damage{};
     float baseDamage{};

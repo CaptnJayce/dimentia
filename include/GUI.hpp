@@ -21,6 +21,8 @@ class UI {
     bool dashReady;
     bool iframesReady;
     float expTotal;
+    int level;
+    double threshold;
 
     static void Init();
     void Update();
