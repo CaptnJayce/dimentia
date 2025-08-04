@@ -1,9 +1,11 @@
 #include "../include/GUI.hpp"
+#include "../include/Globals.hpp"
+
 #include <raylib.h>
 
 // TODO: change Game to MainMenu when introduced
 // Default Menu
-UI::UI(Player& player, Weapon& weapon) : m_currentScene(Game), m_previousScene(Game), m_player(player), m_weapon(weapon) {
+UI::UI(Player& player, Weapon& weapon) : m_currentScene(MainMenu), m_previousScene(Game), m_player(player), m_weapon(weapon) {
     InitMainMenuUI();
     InitGameUI();
 }
@@ -61,9 +63,24 @@ void UI::Draw() {
 }
 
 void UI::InitMainMenuUI() {
-    m_drawFunctions[MainMenu] = []() { DrawText("MainMenu UI Test", 10, 10, 20, WHITE); };
+    m_drawFunctions[MainMenu] = [this]() {
+        const char *title = "Main Menu";
+        constexpr int fontSize = 40;
+        const int textWidth = MeasureText(title, fontSize);
 
-    m_updateFunctions[MainMenu] = []() {};
+        DrawText(title, (screenWidth - textWidth) / 2, screenHeight * 0.2f, fontSize, WHITE);
+
+        const char *prompt = "Press [ENTER] to Start";
+        constexpr int promptFontSize = 20;
+        const int promptWidth = MeasureText(prompt, promptFontSize);
+        DrawText(prompt,(screenWidth - promptWidth) / 2,screenHeight * 0.5f, promptFontSize, LIGHTGRAY);
+    };
+
+    m_updateFunctions[MainMenu] = [this]() {
+        if (IsKeyPressed(KEY_ENTER)) {
+            LoadScene(Game);
+        }
+    };
 }
 
 void UI::InitGameUI() {

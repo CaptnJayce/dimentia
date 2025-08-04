@@ -7,6 +7,7 @@
 int main() {
     SetTargetFPS(120);
     InitWindow(screenWidth, screenHeight, "Dimentia");
+    SetExitKey(KEY_NULL);
 
     InitTextures();
 
@@ -29,52 +30,60 @@ int main() {
     }
 
     while (!WindowShouldClose()) {
-        // Update
-        p.Move();
-
-        grid.Clear();
-        for (Enemy &enemy : enemies) {
-            enemy.Move(p);
-            enemy.Update();
-            grid.Insert(&enemy);
-        }
-
-        p.Update();
-        w.Update(p);
-
-        if (IsKeyPressed(KEY_ONE)) {
+        if (IsKeyPressed(KEY_ESCAPE) && ui.GetCurrentScene() == UI::Game) {
             ui.LoadScene(UI::MainMenu);
         }
-        if (IsKeyPressed(KEY_TWO)) {
+        if (IsKeyPressed(KEY_ENTER) && ui.GetCurrentScene() == UI::MainMenu) {
             ui.LoadScene(UI::Game);
         }
+
         ui.Update();
 
-        for (auto it = enemies.begin(); it != enemies.end();) {
-            if (it->GetHealth()<= 0.0f) {
-                grid.Remove(&(*it));
-                UnloadTexture(it->GetTexture());
-                it = enemies.erase(it);
-            } else {
-                ++it;
+        if (ui.GetCurrentScene() == UI::Game) {
+            p.Move();
+
+            grid.Clear();
+            for (Enemy &enemy : enemies) {
+                enemy.Move(p);
+                enemy.Update();
+                grid.Insert(&enemy);
+            }
+
+            p.Update();
+            w.Update(p);
+
+            for (auto it = enemies.begin(); it != enemies.end();) {
+                if (it->GetHealth() <= 0.0f) {
+                    grid.Remove(&(*it));
+                    UnloadTexture(it->GetTexture());
+                    it = enemies.erase(it);
+                } else {
+                    ++it;
+                }
             }
         }
 
-        // Draw
         BeginDrawing();
-        BeginMode2D(p.camera);
-        ClearBackground({25, 23, 36, 255});
 
-        p.Draw();
-        w.Draw();
-        for (Enemy &enemy : enemies) {
-            enemy.Draw();
+        if (ui.GetCurrentScene() == UI::Game) {
+            BeginMode2D(p.camera);
+            ClearBackground({25, 23, 36, 255});
+
+            p.Draw();
+            w.Draw();
+            for (Enemy &enemy : enemies) {
+                enemy.Draw();
+            }
+
+            // grid.Draw();
+
+            EndMode2D();
+        } else {
+            ClearBackground(BLACK);
         }
 
-        // grid.Draw();
-
-        EndMode2D();
         ui.Draw();
+
         EndDrawing();
     }
 
