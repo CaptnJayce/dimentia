@@ -2,8 +2,8 @@
 #include "../include/Globals.hpp"
 
 #define RAYGUI_IMPLEMENTATION // fuck you
+#include "../raygui.h"
 #include <raylib.h>
-#include "../include/raygui.h"
 
 // TODO: change Game to MainMenu when introduced
 // Default Menu

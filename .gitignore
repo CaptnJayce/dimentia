@@ -1,6 +1,7 @@
 # Ignore generated files
 # ...
 .clang-format
+raygui.h
 
 # Ignore VIM's backup generated files
 *.swp
