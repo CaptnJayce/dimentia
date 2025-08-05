@@ -1,19 +1,23 @@
 #include "../include/GUI.hpp"
 #include "../include/Globals.hpp"
 
+#define RAYGUI_IMPLEMENTATION // fuck you
 #include <raylib.h>
+#include "../include/raygui.h"
 
 // TODO: change Game to MainMenu when introduced
 // Default Menu
 UI::UI(Player& player, Weapon& weapon) : m_currentScene(MainMenu), m_previousScene(Game), m_player(player), m_weapon(weapon) {
     InitMainMenuUI();
     InitGameUI();
+    InitPauseUI();
+    InitSettingsUI();
 }
 
 UI::~UI() { UnloadCurrentScene(); }
 
 void UI::Init() {
-    // TODO: global UI
+    // TODO: remove function or add global UI
 }
 
 void UI::LoadScene(const Scene newScene) {
@@ -64,28 +68,86 @@ void UI::Draw() {
 
 void UI::InitMainMenuUI() {
     m_drawFunctions[MainMenu] = [this]() {
-        const char *title = "Main Menu";
+        const auto title = "Kalpa: Dimentia";
         constexpr int fontSize = 40;
         const int textWidth = MeasureText(title, fontSize);
+        const int x = (screenWidth - textWidth) / 2;
+        const int y = screenHeight * 0.2f;
 
-        DrawText(title, (screenWidth - textWidth) / 2, screenHeight * 0.2f, fontSize, WHITE);
+        DrawText(title, x, y, fontSize, WHITE);
 
-        const char *prompt = "Press [ENTER] to Start";
-        constexpr int promptFontSize = 20;
-        const int promptWidth = MeasureText(prompt, promptFontSize);
-        DrawText(prompt,(screenWidth - promptWidth) / 2,screenHeight * 0.5f, promptFontSize, LIGHTGRAY);
-    };
+        Rectangle buttonRect = {
+            static_cast<float>(screenWidth) /2 - 100,
+            static_cast<float>(screenHeight) * 0.5f,
+            200,
+            40
+        };
 
-    m_updateFunctions[MainMenu] = [this]() {
-        if (IsKeyPressed(KEY_ENTER)) {
+        if (GuiButton(buttonRect, "Start Game")) {
             LoadScene(Game);
         }
+
+        buttonRect.y += 100;
+        if (GuiButton(buttonRect, "Settings")) {
+            LoadScene(Settings);
+        }
+
+        buttonRect.y += 100;
+        if (GuiButton(buttonRect, "Quit")) {
+            CloseWindow();
+        }
+    };
+}
+
+void UI::InitPauseUI() {
+    m_drawFunctions[Pause] = [this]() {
+        const auto title = "Game Paused";
+        constexpr int fontSize = 40;
+        const int textWidth = MeasureText(title, fontSize);
+        const int x = (screenWidth - textWidth) / 2;
+        const int y = screenHeight * 0.2f;
+
+        const auto hint = "Progress will be saved until game is closed";
+        const int hintWidth = MeasureText(hint, fontSize / 2);
+        const int hintX = (screenWidth - hintWidth) / 2;
+        const int hintY = screenHeight * 0.8f;
+
+        DrawText(title, x, y, fontSize, WHITE);
+
+        Rectangle buttonRect = {
+            static_cast<float>(screenWidth)/2 - 100,
+            static_cast<float>(screenHeight) * 0.5f,
+            200,
+            40
+        };
+
+        if (GuiButton(buttonRect, "Resume")) {
+            LoadScene(Game);
+        }
+
+        buttonRect.y += 100;
+        if (GuiButton(buttonRect, "Quit")) {
+            LoadScene(MainMenu);
+        }
+        DrawText(hint, hintX, hintY, fontSize / 2, WHITE);
+    };
+}
+
+void UI::InitSettingsUI() {
+    m_drawFunctions[Settings] = [this]() {
+        const auto *title = ":O so many settings";
+        constexpr int fontSize = 40;
+        const int textWidth = MeasureText(title, fontSize);
+        const int x = (screenWidth - textWidth) / 2;
+        const int y = screenHeight * 0.2f;
+
+        DrawText(title, x, y, fontSize, WHITE);
     };
 }
 
 void UI::InitGameUI() {
     m_drawFunctions[Game] = [this]() {
-        DrawText("Game UI", 10, 10, 20, WHITE);
+        DrawText("Press ESC to Pause", 10, 10, 20, WHITE);
         DrawFPS(10, 30);
         DrawText(TextFormat("Health %f", health), 10, 50, 20, RED);
         DrawText(TextFormat("Damage %f", damage), 10, 70, 20, ORANGE);
@@ -98,6 +160,4 @@ void UI::InitGameUI() {
         DrawText(TextFormat("Level %d", level), 10, 210, 20, YELLOW);
         DrawText(TextFormat("Threshold %f", threshold), 10, 230, 20, GREEN);
     };
-
-    m_updateFunctions[Game] = []() {};
 }

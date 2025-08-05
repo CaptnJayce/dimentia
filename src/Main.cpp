@@ -30,11 +30,34 @@ int main() {
     }
 
     while (!WindowShouldClose()) {
-        if (IsKeyPressed(KEY_ESCAPE) && ui.GetCurrentScene() == UI::Game) {
-            ui.LoadScene(UI::MainMenu);
-        }
-        if (IsKeyPressed(KEY_ENTER) && ui.GetCurrentScene() == UI::MainMenu) {
-            ui.LoadScene(UI::Game);
+        // TODO: move UI logic to UI::Update function
+        switch (ui.GetCurrentScene()) {
+            case UI::MainMenu:
+                if (IsKeyPressed(KEY_ENTER)) {
+                    ui.LoadScene(UI::Game);
+                }
+                break;
+
+            case UI::Game:
+                if (IsKeyPressed(KEY_ESCAPE)) {
+                    ui.LoadScene(UI::Pause);
+                }
+                break;
+
+            case UI::Settings:
+                if (IsKeyPressed(KEY_ESCAPE)) {
+                    ui.LoadScene(UI::MainMenu);
+                }
+                break;
+
+            case UI::Pause:
+                if (IsKeyPressed(KEY_ESCAPE)) {
+                    ui.LoadScene(UI::Game);
+                }
+                break;
+
+            default:
+                break;
         }
 
         ui.Update();
@@ -65,7 +88,7 @@ int main() {
 
         BeginDrawing();
 
-        if (ui.GetCurrentScene() == UI::Game) {
+        if (ui.GetCurrentScene() == UI::Game || ui.GetCurrentScene() == UI::Pause) {
             BeginMode2D(p.camera);
             ClearBackground({25, 23, 36, 255});
 
@@ -76,8 +99,12 @@ int main() {
             }
 
             // grid.Draw();
-
             EndMode2D();
+
+            // dim screen if paused
+            if (ui.GetCurrentScene() == UI::Pause) {
+                DrawRectangle(0, 0, screenWidth, screenHeight, {0, 0, 0, 180});
+            }
         } else {
             ClearBackground(BLACK);
         }

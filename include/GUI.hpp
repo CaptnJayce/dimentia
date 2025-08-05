@@ -13,16 +13,16 @@ class UI {
     void LoadScene(Scene newScene);
     Scene GetCurrentScene() const { return m_currentScene; }
 
-    float health;
-    float damage;
-    float speed;
-    int atkCounter;
-    float dashSpeed;
-    bool dashReady;
-    bool iframesReady;
-    float expTotal;
-    int level;
-    double threshold;
+    float health{};
+    float damage{};
+    float speed{};
+    int atkCounter{};
+    float dashSpeed{};
+    bool dashReady{};
+    bool iframesReady{};
+    float expTotal{};
+    int level{};
+    double threshold{};
 
     static void Init();
     void Update();
@@ -40,6 +40,8 @@ class UI {
 
     void InitMainMenuUI();
     void InitGameUI();
+    void InitPauseUI();
+    void InitSettingsUI();
 
     void UnloadCurrentScene() const;
 };
