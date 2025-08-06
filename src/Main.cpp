@@ -18,6 +18,7 @@ int main() {
 
     UI ui(p, w);
 
+    // TODO: sophisticated enemy spawning system
     for (int i = 0; i < 100; i++) {
         Enemy e;
         e.Init();
@@ -114,6 +115,7 @@ int main() {
         EndDrawing();
     }
 
+    // TODO: Move into helper function
     for (Enemy &enemy : enemies) {
         UnloadTexture(enemy.GetTexture());
     }

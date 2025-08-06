@@ -5,7 +5,12 @@
 #include "../raygui.h"
 #include <raylib.h>
 
-// TODO: change Game to MainMenu when introduced
+/* TODO:
+ * Custom font
+ * Controls for font size
+ * Hide player stats in pause menu
+ */
+
 // Default Menu
 UI::UI(Player& player, Weapon& weapon) : m_currentScene(MainMenu), m_previousScene(Game), m_player(player), m_weapon(weapon) {
     InitMainMenuUI();
