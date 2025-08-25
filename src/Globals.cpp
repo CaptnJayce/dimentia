@@ -1,4 +1,5 @@
 #include "../include/Globals.hpp"
+#include "../include/Enemy.hpp"
 #include <raylib.h>
 
 Textures textures;
@@ -7,12 +8,21 @@ int screenHeight = 1080;
 int screenWidth = 1920;
 float cellSize = 25.0f;
 
-// TODO: As game expands, I should split this up into multiple inits depending on the level loaded
+// TODO: As game expands, I should split this up into multiple inits depending
+// on the level loaded
 void InitTextures() {
-    // weapon textures
-    textures.crescentSlashTexture = LoadTexture("../sprites/CrescentSlash.png");
+  // weapon textures
+  textures.crescentSlashTexture = LoadTexture("../sprites/CrescentSlash.png");
 
-    // player textures
-    textures.crescentWitchIdleTexture = LoadTexture("../sprites/s_CrescentWitchIdle.png");
-    textures.crescentWitchRunTexture = LoadTexture("../sprites/s_CrescentWitchRun.png");
+  // player textures
+  textures.crescentWitchIdleTexture =
+      LoadTexture("../sprites/s_CrescentWitchIdle.png");
+  textures.crescentWitchRunTexture =
+      LoadTexture("../sprites/s_CrescentWitchRun.png");
+}
+
+void UnloadEnemyTextures(std::vector<Enemy> &enemies) {
+  for (Enemy &enemy : enemies) {
+    UnloadTexture(enemy.GetTexture());
+  }
 }
