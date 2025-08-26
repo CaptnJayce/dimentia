@@ -59,7 +59,6 @@ void Weapon::Attack(std::vector<Enemy> &enemies, Player &player) {
   }
 
   player.LevelUp();
-  Receive(enemies);
 }
 
 void Weapon::Draw() {

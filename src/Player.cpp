@@ -161,7 +161,10 @@ void Player::LevelUp() {
   }
 }
 
-void Player::Update() { animManager.Update(); }
+void Player::Update() {
+  Receive(enemies);
+  animManager.Update();
+}
 
 void Player::Draw() {
   const bool flipSprite = (lastDir.x < 0.0f);
