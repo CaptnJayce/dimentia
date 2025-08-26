@@ -1,4 +1,5 @@
 #include "../include/GUI.hpp"
+#include "../include/Entity.hpp"
 #include "../include/Globals.hpp"
 
 #define RAYGUI_IMPLEMENTATION // fuck you
@@ -12,9 +13,7 @@
  */
 
 // Default Menu
-UI::UI(Player &player, Weapon &weapon)
-    : m_currentScene(MainMenu), m_previousScene(Game), m_player(player),
-      m_weapon(weapon) {
+UI::UI(Player &player, Weapon &weapon) : m_currentScene(MainMenu), m_previousScene(Game), m_player(player), m_weapon(weapon) {
   InitMainMenuUI();
   InitGameUI();
   InitPauseUI();
@@ -78,16 +77,12 @@ void UI::InitMainMenuUI() {
     const auto title = "Kalpa: Dimentia";
     constexpr int fontSize = 40;
     const int textWidth = MeasureText(title, fontSize);
-    const int x = static_cast<int>(
-        (static_cast<float>(screenWidth) - static_cast<float>(textWidth)) /
-        2.0f);
+    const int x = static_cast<int>((static_cast<float>(screenWidth) - static_cast<float>(textWidth)) / 2.0f);
     const int y = static_cast<int>(static_cast<float>(screenHeight) * 0.2f);
 
     DrawText(title, x, y, fontSize, WHITE);
 
-    Rectangle buttonRect = {static_cast<float>(screenWidth) / 2.0f - 100.0f,
-                            static_cast<float>(screenHeight) * 0.5f, 200.0f,
-                            40.0f};
+    Rectangle buttonRect = {static_cast<float>(screenWidth) / 2.0f - 100.0f, static_cast<float>(screenHeight) * 0.5f, 200.0f, 40.0f};
 
     if (GuiButton(buttonRect, "Start Game")) {
       LoadScene(Game);
@@ -110,23 +105,17 @@ void UI::InitPauseUI() {
     const auto title = "Game Paused";
     constexpr int fontSize = 40;
     const int textWidth = MeasureText(title, fontSize);
-    const int x = static_cast<int>(
-        (static_cast<float>(screenWidth) - static_cast<float>(textWidth)) /
-        2.0f);
+    const int x = static_cast<int>((static_cast<float>(screenWidth) - static_cast<float>(textWidth)) / 2.0f);
     const int y = static_cast<int>(static_cast<float>(screenHeight) * 0.2f);
 
     const auto hint = "Progress will be saved until game is closed";
     const int hintWidth = MeasureText(hint, fontSize / 2);
-    const int hintX = static_cast<int>(
-        (static_cast<float>(screenWidth) - static_cast<float>(hintWidth)) /
-        2.0f);
+    const int hintX = static_cast<int>((static_cast<float>(screenWidth) - static_cast<float>(hintWidth)) / 2.0f);
     const int hintY = static_cast<int>(static_cast<float>(screenHeight) * 0.8f);
 
     DrawText(title, x, y, fontSize, WHITE);
 
-    Rectangle buttonRect = {static_cast<float>(screenWidth) / 2.0f - 100.0f,
-                            static_cast<float>(screenHeight) * 0.5f, 200.0f,
-                            40.0f};
+    Rectangle buttonRect = {static_cast<float>(screenWidth) / 2.0f - 100.0f, static_cast<float>(screenHeight) * 0.5f, 200.0f, 40.0f};
 
     if (GuiButton(buttonRect, "Resume")) {
       LoadScene(Game);
@@ -142,15 +131,16 @@ void UI::InitPauseUI() {
 
 void UI::InitSettingsUI() {
   m_drawFunctions[Settings] = [this] {
-    const auto *title = ":O so many settings";
+    const char *title = "Settings";
     constexpr int fontSize = 40;
     const int textWidth = MeasureText(title, fontSize);
-    const int x = static_cast<int>(
-        (static_cast<float>(screenWidth) - static_cast<float>(textWidth)) /
-        2.0f);
-    const int y = static_cast<int>(static_cast<float>(screenHeight) * 0.2f);
+    const int x = (screenWidth - textWidth) / 2;
+    const int y = static_cast<int>(screenHeight * 0.2f);
+    Rectangle zoomRect = {static_cast<float>(screenWidth) / 2.0f - 100.0f, static_cast<float>(screenHeight) * 0.5f, 200.0f, 40.0f};
 
     DrawText(title, x, y, fontSize, WHITE);
+
+    GuiSlider(zoomRect, "Camera Zoom", NULL, &zoomLevel, 1.0f, 6.0f);
   };
 }
 
@@ -162,11 +152,9 @@ void UI::InitGameUI() {
     DrawText(TextFormat("Damage %f", damage), 10, 70, 20, ORANGE);
     DrawText(TextFormat("Speed %f", speed), 10, 90, 20, YELLOW);
     DrawText(TextFormat("Dash %f", dashSpeed), 10, 110, 20, GREEN);
-    DrawText(TextFormat("Dash Ready %d", static_cast<int>(dashReady)), 10, 130,
-             20, BLUE);
+    DrawText(TextFormat("Dash Ready %d", static_cast<int>(dashReady)), 10, 130, 20, BLUE);
     DrawText(TextFormat("Counter %d", atkCounter), 10, 150, 20, VIOLET);
-    DrawText(TextFormat("IFrames Ready %d", static_cast<int>(iframesReady)), 10,
-             170, 20, RED);
+    DrawText(TextFormat("IFrames Ready %d", static_cast<int>(iframesReady)), 10, 170, 20, RED);
     DrawText(TextFormat("Total Exp %f", expTotal), 10, 190, 20, ORANGE);
     DrawText(TextFormat("Level %d", level), 10, 210, 20, YELLOW);
     DrawText(TextFormat("Threshold %f", threshold), 10, 230, 20, GREEN);

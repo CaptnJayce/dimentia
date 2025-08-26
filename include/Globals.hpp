@@ -19,6 +19,7 @@ struct Textures {
 extern int screenWidth;
 extern int screenHeight;
 extern float cellSize;
+extern float zoomLevel;
 
 extern Textures textures;
 

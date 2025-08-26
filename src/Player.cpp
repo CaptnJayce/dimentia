@@ -10,10 +10,8 @@
 void Player::Init() {
   weapon = Weapon();
 
-  animManager.AddAnimation(AnimState::IDLE, textures.crescentWitchIdleTexture,
-                           19, 0.1f, true);
-  animManager.AddAnimation(AnimState::RUN, textures.crescentWitchRunTexture, 6,
-                           0.1f, true);
+  animManager.AddAnimation(AnimState::IDLE, textures.crescentWitchIdleTexture, 19, 0.1f, true);
+  animManager.AddAnimation(AnimState::RUN, textures.crescentWitchRunTexture, 6, 0.1f, true);
   currentAnimState = AnimState::IDLE;
 
   pos = {0.0f, 0.0f};
@@ -55,7 +53,7 @@ void Player::Init() {
   camera.target = pos;
   camera.offset = {1920.0f / 2.0f, 1080.0f / 2.0f};
   camera.rotation = 0.0f;
-  camera.zoom = 3.0f;
+  camera.zoom = zoomLevel;
 }
 
 void Player::Move() {
@@ -124,10 +122,7 @@ void Player::Receive(std::vector<Enemy> &enemies) {
   if (iframesReady) {
     bool tookDamage = false;
     for (const Enemy &enemy : enemies) {
-      if (CheckCollisionCircles(
-              {hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius,
-              {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y},
-              enemy.GetHitCircle().radius)) {
+      if (CheckCollisionCircles({hitCircle.pos.x, hitCircle.pos.y}, hitCircle.radius, {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y}, enemy.GetHitCircle().radius)) {
         health -= enemy.GetDamage();
         tookDamage = true;
         break;
@@ -139,8 +134,7 @@ void Player::Receive(std::vector<Enemy> &enemies) {
       iframeTimer = iframes;
 
       for (Enemy &enemy : enemies) {
-        const Vector2 enemyCenter = {enemy.GetHitCircle().pos.x,
-                                     enemy.GetHitCircle().pos.y};
+        const Vector2 enemyCenter = {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y};
         const Vector2 playerCenter = {hitCircle.pos.x, hitCircle.pos.y};
         Vector2 direction = Vector2Subtract(enemyCenter, playerCenter);
 

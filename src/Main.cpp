@@ -22,8 +22,7 @@ int main() {
   for (int i = 0; i < 100; i++) {
     Enemy e;
     e.Init();
-    e.SetPos(static_cast<float>(GetRandomValue(0, 1000)),
-             static_cast<float>(GetRandomValue(0, 1000)));
+    e.SetPos(static_cast<float>(GetRandomValue(0, 1000)), static_cast<float>(GetRandomValue(0, 1000)));
     enemies.push_back(e);
     grid.Insert(&enemies.back());
   }
@@ -59,6 +58,8 @@ int main() {
       break;
     }
 
+    // TODO: move to settings Init
+    p.camera.zoom = zoomLevel;
     ui.Update();
 
     if (ui.GetCurrentScene() == UI::Game) {
@@ -113,10 +114,7 @@ int main() {
     EndDrawing();
   }
 
-  // TODO: Move into helper function
-  for (Enemy &enemy : enemies) {
-    UnloadTexture(enemy.GetTexture());
-  }
+  UnloadEnemyTextures(enemies);
   CloseWindow();
   return 0;
 }

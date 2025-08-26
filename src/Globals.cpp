@@ -7,6 +7,7 @@ Textures textures;
 int screenHeight = 1080;
 int screenWidth = 1920;
 float cellSize = 25.0f;
+float zoomLevel = 4.0f; // default zoom level
 
 // TODO: As game expands, I should split this up into multiple inits depending
 // on the level loaded
@@ -15,10 +16,8 @@ void InitTextures() {
   textures.crescentSlashTexture = LoadTexture("../sprites/CrescentSlash.png");
 
   // player textures
-  textures.crescentWitchIdleTexture =
-      LoadTexture("../sprites/s_CrescentWitchIdle.png");
-  textures.crescentWitchRunTexture =
-      LoadTexture("../sprites/s_CrescentWitchRun.png");
+  textures.crescentWitchIdleTexture = LoadTexture("../sprites/s_CrescentWitchIdle.png");
+  textures.crescentWitchRunTexture = LoadTexture("../sprites/s_CrescentWitchRun.png");
 }
 
 void UnloadEnemyTextures(std::vector<Enemy> &enemies) {
