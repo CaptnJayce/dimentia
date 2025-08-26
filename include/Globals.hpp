@@ -20,6 +20,8 @@ extern int screenWidth;
 extern int screenHeight;
 extern float cellSize;
 extern float zoomLevel;
+extern float volumeLevel;
+extern bool shouldClose;
 
 extern Textures textures;
 

@@ -27,7 +27,7 @@ int main() {
     grid.Insert(&enemies.back());
   }
 
-  while (!WindowShouldClose()) {
+  while (!WindowShouldClose() && !shouldClose) {
     // TODO: move UI logic to UI::Update function
     switch (ui.GetCurrentScene()) {
     case UI::MainMenu:

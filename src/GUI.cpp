@@ -1,4 +1,5 @@
 #include "../include/GUI.hpp"
+#include "../include/Enemy.hpp"
 #include "../include/Entity.hpp"
 #include "../include/Globals.hpp"
 
@@ -77,12 +78,12 @@ void UI::InitMainMenuUI() {
     const auto title = "Kalpa: Dimentia";
     constexpr int fontSize = 40;
     const int textWidth = MeasureText(title, fontSize);
-    const int x = static_cast<int>((static_cast<float>(screenWidth) - static_cast<float>(textWidth)) / 2.0f);
-    const int y = static_cast<int>(static_cast<float>(screenHeight) * 0.2f);
+    const int x = (screenWidth - textWidth) / 2;
+    const int y = static_cast<int>(screenHeight * 0.2f);
 
     DrawText(title, x, y, fontSize, WHITE);
 
-    Rectangle buttonRect = {static_cast<float>(screenWidth) / 2.0f - 100.0f, static_cast<float>(screenHeight) * 0.5f, 200.0f, 40.0f};
+    Rectangle buttonRect = {screenWidth / 2.0f - 100.0f, screenHeight * 0.5f, 200.0f, 40.0f};
 
     if (GuiButton(buttonRect, "Start Game")) {
       LoadScene(Game);
@@ -95,7 +96,7 @@ void UI::InitMainMenuUI() {
 
     buttonRect.y += 100.0f;
     if (GuiButton(buttonRect, "Quit")) {
-      CloseWindow();
+      shouldClose = true;
     }
   };
 }
@@ -136,11 +137,18 @@ void UI::InitSettingsUI() {
     const int textWidth = MeasureText(title, fontSize);
     const int x = (screenWidth - textWidth) / 2;
     const int y = static_cast<int>(screenHeight * 0.2f);
-    Rectangle zoomRect = {static_cast<float>(screenWidth) / 2.0f - 100.0f, static_cast<float>(screenHeight) * 0.5f, 200.0f, 40.0f};
+    Rectangle sliderRect = {static_cast<float>(screenWidth) / 2.0f - 100.0f, static_cast<float>(screenHeight) * 0.5f, 200.0f, 40.0f};
 
     DrawText(title, x, y, fontSize, WHITE);
 
-    GuiSlider(zoomRect, "Camera Zoom", NULL, &zoomLevel, 1.0f, 6.0f);
+    constexpr float step = 2.0f;
+
+    GuiSlider(sliderRect, "Volume Slider", NULL, &volumeLevel, 0.0f, 100.0f);
+    volumeLevel = roundf(volumeLevel / step) * step;
+    sliderRect.y += 100.0f;
+
+    GuiSlider(sliderRect, "Camera Zoom", NULL, &zoomLevel, 2.0f, 6.0f);
+    zoomLevel = roundf(zoomLevel / step) * step;
   };
 }
 
