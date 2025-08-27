@@ -23,10 +23,6 @@ UI::UI(Player &player, Weapon &weapon) : m_currentScene(MainMenu), m_previousSce
 
 UI::~UI() { UnloadCurrentScene(); }
 
-void UI::Init() {
-  // TODO: remove function or add global UI
-}
-
 void UI::LoadScene(const Scene newScene) {
   if (m_currentScene == newScene) {
     return;
@@ -170,13 +166,13 @@ void UI::InitSettingsUI() {
 
     DrawText(title, x, y, fontSize, WHITE);
 
-    constexpr float step = 2.0f;
+    constexpr float step = 1.0f;
 
     GuiSlider(sliderRect, "Volume Slider", NULL, &volumeLevel, 0.0f, 100.0f);
     volumeLevel = roundf(volumeLevel / step) * step;
     sliderRect.y += 100.0f;
 
-    GuiSlider(sliderRect, "Camera Zoom", NULL, &zoomLevel, 2.0f, 6.0f);
+    GuiSlider(sliderRect, "Camera Zoom", NULL, &zoomLevel, 1.0f, 10.0f);
     zoomLevel = roundf(zoomLevel / step) * step;
   };
 }

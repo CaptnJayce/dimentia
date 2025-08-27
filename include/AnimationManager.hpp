@@ -3,33 +3,33 @@
 #include <unordered_map>
 
 enum class AnimState {
-    IDLE,
-    RUN,
+  IDLE,
+  RUN,
 };
 
 struct Animation {
-    Texture2D sheet;
-    Rectangle frameRec;
-    int frameCount;
-    int currentFrame;
-    float frameCounter;
-    float frameDelay;
-    bool loop;
+  Texture2D sheet;
+  Rectangle frameRec;
+  int frameCount;
+  int currentFrame;
+  float frameCounter;
+  float frameDelay;
+  bool loop;
 };
 
 class AnimationManager {
-  public:
-    AnimationManager();
-    //~AnimationManager();
+public:
+  AnimationManager();
+  //~AnimationManager();
 
-    void AddAnimation(AnimState state, const Texture &name, int frames, float delay, bool loops);
-    void Play(AnimState state, bool forceRestart = false);
-    void Update();
-    void Draw(Vector2 position, bool flipX = false);
+  void AddAnimation(AnimState state, const Texture &name, int frames, float delay, bool loops);
+  void Play(AnimState state, bool forceRestart = false);
+  void Update();
+  void Draw(Vector2 position, const Camera2D &camera, bool flipX = false);
 
-    AnimState GetCurrentState() const { return currentState; }
+  AnimState GetCurrentState() const { return currentState; }
 
-  private:
-    std::unordered_map<AnimState, Animation> animations;
-    AnimState currentState;
+private:
+  std::unordered_map<AnimState, Animation> animations;
+  AnimState currentState;
 };

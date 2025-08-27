@@ -162,7 +162,7 @@ void Player::Update() {
 
 void Player::Draw() {
   const bool flipSprite = (lastDir.x < 0.0f);
-  animManager.Draw(pos, flipSprite);
+  animManager.Draw(pos, camera, flipSprite);
 }
 
 void Player::ChangeAnimation(const AnimState newState) {

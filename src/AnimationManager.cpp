@@ -1,11 +1,10 @@
 #include "../include/AnimationManager.hpp"
+#include <cmath>
 #include <raylib.h>
 
 AnimationManager::AnimationManager() : currentState(AnimState::IDLE) {}
 
-void AnimationManager::AddAnimation(const AnimState state, const Texture &name,
-                                    const int frames, const float delay,
-                                    const bool loops) {
+void AnimationManager::AddAnimation(const AnimState state, const Texture &name, const int frames, const float delay, const bool loops) {
   Animation anim{};
   anim.sheet = Texture(name);
   anim.frameCount = frames;
@@ -13,8 +12,7 @@ void AnimationManager::AddAnimation(const AnimState state, const Texture &name,
   anim.loop = loops;
   anim.currentFrame = 0;
   anim.frameCounter = 0;
-  anim.frameRec = {0, 0, static_cast<float>(anim.sheet.width) / frames,
-                   static_cast<float>(anim.sheet.height)};
+  anim.frameRec = {0, 0, static_cast<float>(anim.sheet.width) / frames, static_cast<float>(anim.sheet.height)};
   animations[state] = anim;
 }
 
@@ -45,11 +43,20 @@ void AnimationManager::Update() {
   }
 }
 
-void AnimationManager::Draw(const Vector2 position, const bool flipX) {
+void AnimationManager::Draw(const Vector2 position, const Camera2D &camera, const bool flipX) {
   const auto &anim = animations[currentState];
   Rectangle source = anim.frameRec;
+
   if (flipX) {
     source.width *= -1;
   }
-  DrawTextureRec(anim.sheet, source, position, WHITE);
+
+  Vector2 screenPos = GetWorldToScreen2D(position, camera);
+
+  screenPos.x = floorf(screenPos.x);
+  screenPos.y = floorf(screenPos.y);
+
+  Vector2 snappedWorld = GetScreenToWorld2D(screenPos, camera);
+
+  DrawTextureRec(anim.sheet, source, snappedWorld, WHITE);
 }

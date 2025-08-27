@@ -24,7 +24,6 @@ public:
   int level{};
   double threshold{};
 
-  static void Init();
   void Update();
   void Draw();
 

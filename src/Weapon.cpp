@@ -37,22 +37,17 @@ void Weapon::Attack(std::vector<Enemy> &enemies, Player &player) {
   if (finalAtk) {
     spinSpeed = 40.0f;
     spinAngle += spinSpeed * GetFrameTime();
-    weaponPosition = {pos.x + cosf(spinAngle) * weaponDistance,
-                      pos.y + sinf(spinAngle) * weaponDistance};
+    weaponPosition = {pos.x + cosf(spinAngle) * weaponDistance, pos.y + sinf(spinAngle) * weaponDistance};
   } else {
     const Vector2 direction = Vector2Subtract(cursorPos, pos);
     const Vector2 normalized = Vector2Normalize(direction);
-    weaponPosition = {pos.x + normalized.x * weaponDistance,
-                      pos.y + normalized.y * weaponDistance};
+    weaponPosition = {pos.x + normalized.x * weaponDistance, pos.y + normalized.y * weaponDistance};
   }
 
   atkCircle.pos = weaponPosition;
 
   for (int i = 0; i < enemies.size();) {
-    if (Enemy &enemy = enemies[i]; CheckCollisionCircles(
-            weaponPosition, atkCircle.radius,
-            {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y},
-            enemy.GetHitCircle().radius)) {
+    if (Enemy &enemy = enemies[i]; CheckCollisionCircles(weaponPosition, atkCircle.radius, {enemy.GetHitCircle().pos.x, enemy.GetHitCircle().pos.y}, enemy.GetHitCircle().radius)) {
       enemy.Receive(pos, knockback, damage, player);
     }
     i++;
@@ -77,27 +72,20 @@ void Weapon::Draw() {
   if (atkActiveTimer > 0.0f) {
     DrawCircleLines(weaponPosition.x, weaponPosition.y, atkCircle.radius, RED);
 
-    const Vector2 txtOrigin = {static_cast<float>(atkTexture.width) / 2.0f,
-                               static_cast<float>(atkTexture.height) / 2.0f};
-    const Rectangle destRec = {weaponPosition.x, weaponPosition.y,
-                               static_cast<float>(atkTexture.width),
-                               static_cast<float>(atkTexture.height)};
-    DrawTexturePro(atkTexture,
-                   Rectangle{0.0f, 0.0f, static_cast<float>(atkTexture.width),
-                             static_cast<float>(atkTexture.height)},
-                   destRec, txtOrigin, rotation, WHITE);
+    const Vector2 txtOrigin = {static_cast<float>(atkTexture.width) / 2.0f, static_cast<float>(atkTexture.height) / 2.0f};
+    const Rectangle destRec = {weaponPosition.x, weaponPosition.y, static_cast<float>(atkTexture.width), static_cast<float>(atkTexture.height)};
+    DrawTexturePro(atkTexture, Rectangle{0.0f, 0.0f, static_cast<float>(atkTexture.width), static_cast<float>(atkTexture.height)}, destRec, txtOrigin, rotation, WHITE);
   }
 
   const bool flipSprite = (lastDir.x < 0.0f);
-  animManager.Draw(pos, flipSprite);
+  animManager.Draw(pos, camera, flipSprite);
 }
 
 void Weapon::Update(Player &player) {
   const float delta = GetFrameTime();
   cursorPos = GetScreenToWorld2D(GetMousePosition(), player.camera);
 
-  const Vector2 playerCenter = {player.GetPos().x + player.width / 2.0f,
-                                player.GetPos().y + player.height / 2.0f};
+  const Vector2 playerCenter = {player.GetPos().x + player.width / 2.0f, player.GetPos().y + player.height / 2.0f};
   pos = playerCenter;
 
   // needed for debug
