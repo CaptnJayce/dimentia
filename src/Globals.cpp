@@ -11,6 +11,8 @@ float zoomLevel = 4.0f;    // default zoom level
 float volumeLevel = 25.0f; // default volume level
 bool shouldClose = false;
 
+std::unordered_set<int> gridCells;
+
 // TODO: As game expands, I should split this up into multiple inits depending
 // on the level loaded
 void InitTextures() {

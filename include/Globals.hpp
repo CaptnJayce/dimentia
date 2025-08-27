@@ -2,6 +2,7 @@
 
 #include "./Entity.hpp"
 #include <raylib.h>
+#include <unordered_set>
 #include <vector>
 
 // NOTE TO SELF: this is necessary for games future
@@ -15,6 +16,8 @@ struct Textures {
   Texture crescentWitchIdleTexture;
   Texture crescentWitchRunTexture;
 };
+
+extern std::unordered_set<int> gridCells;
 
 extern int screenWidth;
 extern int screenHeight;

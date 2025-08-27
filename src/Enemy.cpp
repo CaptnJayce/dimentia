@@ -1,4 +1,5 @@
 #include "../include/Enemy.hpp"
+#include "../include/Globals.hpp"
 #include "../include/Player.hpp"
 #include "../include/SpatialGrid.hpp"
 
@@ -44,13 +45,11 @@ void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
     }
 
     const Vector2 enemyCenter = {pos.x + width / 2, pos.y + height / 2};
-    const Vector2 otherCenter = {other->pos.x + other->width / 2,
-                                 other->pos.y + other->height / 2};
+    const Vector2 otherCenter = {other->pos.x + other->width / 2, other->pos.y + other->height / 2};
 
     const Vector2 diff = Vector2Subtract(enemyCenter, otherCenter);
 
-    if (const float distance = Vector2Length(diff);
-        distance < minDistance && distance > 0) {
+    if (const float distance = Vector2Length(diff); distance < minDistance && distance > 0) {
       const float overlap = minDistance - distance;
       const Vector2 direction = Vector2Normalize(diff);
 
@@ -64,8 +63,7 @@ void Enemy::Avoid(const std::vector<Enemy *> &nearbyEnemies) {
 void Enemy::Move(const Player &player) {
   const float delta = GetFrameTime();
 
-  const Vector2 playerCenter = {player.GetPos().x + player.width / 2.0f,
-                                player.GetPos().y + player.height / 2.0f};
+  const Vector2 playerCenter = {player.GetPos().x + player.width / 2.0f, player.GetPos().y + player.height / 2.0f};
 
   const Vector2 enemyCenter = {pos.x + width / 2.0f, pos.y + height / 2.0f};
 
@@ -80,8 +78,7 @@ void Enemy::Move(const Player &player) {
   hitCircle.pos.y = pos.y + height / 2.0f;
 }
 
-void Enemy::Receive(const Vector2 source, const float knockback,
-                    const float damage, Player &player) {
+void Enemy::Receive(const Vector2 source, const float knockback, const float damage, Player &player) {
   const Vector2 enemyCenter = {hitCircle.pos.x, hitCircle.pos.y};
   Vector2 direction = Vector2Subtract(enemyCenter, source);
 
@@ -90,8 +87,7 @@ void Enemy::Receive(const Vector2 source, const float knockback,
   }
 
   if (iframesReady) {
-    knockbackVelocity =
-        Vector2Scale(direction, knockback * (1.0f - knockbackResistance));
+    knockbackVelocity = Vector2Scale(direction, knockback * (1.0f - knockbackResistance));
     health -= damage;
     iframesReady = false;
     iframeTimer = iframes;
@@ -123,14 +119,12 @@ void Enemy::Update() {
 
   if (Vector2Length(knockbackVelocity) > 0.1f) {
     pos = Vector2Add(pos, Vector2Scale(knockbackVelocity, delta));
-    knockbackVelocity =
-        Vector2Lerp(knockbackVelocity, Vector2Zero(), 5.0f * delta);
+    knockbackVelocity = Vector2Lerp(knockbackVelocity, Vector2Zero(), 5.0f * delta);
   } else {
     knockbackVelocity = Vector2Zero();
   }
 
-  const std::vector<Enemy *> nearbyEnemies =
-      grid.GetNeighboursInRadius(this, 50.0f);
+  const std::vector<Enemy *> nearbyEnemies = grid.GetNeighboursInRadius(this, 50.0f);
   Avoid(nearbyEnemies);
 
   hitCircle.pos.x = pos.x + width / 2.0f;
@@ -140,7 +134,6 @@ void Enemy::Update() {
 void Enemy::Draw() const {
   // DrawCircleLines(hitCircle.pos.x, hitCircle.pos.y, hitCircle.radius, RED);
 
-  const Rectangle srcRect = {0.0f, 0.0f, static_cast<float>(texture.width),
-                             static_cast<float>(texture.height)};
+  const Rectangle srcRect = {0.0f, 0.0f, static_cast<float>(texture.width), static_cast<float>(texture.height)};
   DrawTextureRec(texture, srcRect, pos, RAYWHITE);
 }
