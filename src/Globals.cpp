@@ -1,5 +1,6 @@
 #include "../include/Globals.hpp"
 #include "../include/Enemy.hpp"
+#include "../include/Player.hpp"
 #include <raylib.h>
 
 Textures textures;
@@ -23,6 +24,8 @@ void InitTextures() {
   textures.crescentWitchIdleTexture = LoadTexture("../sprites/s_CrescentWitchIdle.png");
   textures.crescentWitchRunTexture = LoadTexture("../sprites/s_CrescentWitchRun.png");
 }
+
+void InitSettings(Player &player) { player.camera.zoom = zoomLevel; }
 
 void UnloadEnemyTextures(std::vector<Enemy> &enemies) {
   for (Enemy &enemy : enemies) {

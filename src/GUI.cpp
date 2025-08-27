@@ -65,6 +65,35 @@ void UI::Update() {
   expTotal = m_player.GetExperience();
   level = m_player.GetLevel();
   threshold = m_player.GetThreshold();
+
+  switch (GetCurrentScene()) {
+  case UI::MainMenu:
+    if (IsKeyPressed(KEY_ENTER)) {
+      LoadScene(UI::Game);
+    }
+    break;
+
+  case UI::Game:
+    if (IsKeyPressed(KEY_ESCAPE)) {
+      LoadScene(UI::Pause);
+    }
+    break;
+
+  case UI::Settings:
+    if (IsKeyPressed(KEY_ESCAPE)) {
+      LoadScene(UI::MainMenu);
+    }
+    break;
+
+  case UI::Pause:
+    if (IsKeyPressed(KEY_ESCAPE)) {
+      LoadScene(UI::Game);
+    }
+    break;
+
+  default:
+    break;
+  }
 }
 
 void UI::Draw() {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./Entity.hpp"
+#include "./Player.hpp"
 #include <raylib.h>
 #include <unordered_set>
 #include <vector>
@@ -29,4 +30,5 @@ extern bool shouldClose;
 extern Textures textures;
 
 void InitTextures();
+void InitSettings(Player &player);
 void UnloadEnemyTextures(std::vector<Enemy> &enemies);

@@ -28,38 +28,7 @@ int main() {
   }
 
   while (!WindowShouldClose() && !shouldClose) {
-    // TODO: move UI logic to UI::Update function
-    switch (ui.GetCurrentScene()) {
-    case UI::MainMenu:
-      if (IsKeyPressed(KEY_ENTER)) {
-        ui.LoadScene(UI::Game);
-      }
-      break;
-
-    case UI::Game:
-      if (IsKeyPressed(KEY_ESCAPE)) {
-        ui.LoadScene(UI::Pause);
-      }
-      break;
-
-    case UI::Settings:
-      if (IsKeyPressed(KEY_ESCAPE)) {
-        ui.LoadScene(UI::MainMenu);
-      }
-      break;
-
-    case UI::Pause:
-      if (IsKeyPressed(KEY_ESCAPE)) {
-        ui.LoadScene(UI::Game);
-      }
-      break;
-
-    default:
-      break;
-    }
-
-    // TODO: move to settings Init
-    p.camera.zoom = zoomLevel;
+    InitSettings(p);
     ui.Update();
 
     if (ui.GetCurrentScene() == UI::Game) {
