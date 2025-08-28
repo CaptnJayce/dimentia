@@ -1,7 +1,7 @@
-#include "../include/GUI.hpp"
-#include "../include/Globals.hpp"
-#include "../include/Player.hpp"
-#include "../include/SpatialGrid.hpp"
+#include "GUI.hpp"
+#include "Globals.hpp"
+#include "Player.hpp"
+#include "SpatialGrid.hpp"
 #include <raylib.h>
 
 int main() {

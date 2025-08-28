@@ -1,7 +1,7 @@
 #pragma once
 
-#include "./Entity.hpp"
-#include "./Player.hpp"
+#include "Entity.hpp"
+#include "Player.hpp"
 #include <raylib.h>
 #include <unordered_set>
 #include <vector>

@@ -1,4 +1,4 @@
-#include "../include/AnimationManager.hpp"
+#include "AnimationManager.hpp"
 #include <cmath>
 #include <raylib.h>
 

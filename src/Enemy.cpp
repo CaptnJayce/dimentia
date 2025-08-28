@@ -1,7 +1,7 @@
-#include "../include/Enemy.hpp"
-#include "../include/Globals.hpp"
-#include "../include/Player.hpp"
-#include "../include/SpatialGrid.hpp"
+#include "Enemy.hpp"
+#include "Globals.hpp"
+#include "Player.hpp"
+#include "SpatialGrid.hpp"
 
 #include <raylib.h>
 #include <raymath.h>

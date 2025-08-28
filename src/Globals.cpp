@@ -1,6 +1,6 @@
-#include "../include/Globals.hpp"
-#include "../include/Enemy.hpp"
-#include "../include/Player.hpp"
+#include "Globals.hpp"
+#include "Enemy.hpp"
+#include "Player.hpp"
 #include <raylib.h>
 
 Textures textures;

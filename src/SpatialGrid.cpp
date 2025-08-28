@@ -1,5 +1,5 @@
-#include "../include/SpatialGrid.hpp"
-#include "../include/Globals.hpp"
+#include "SpatialGrid.hpp"
+#include "Globals.hpp"
 #include <algorithm>
 #include <cmath>
 #include <unordered_set>

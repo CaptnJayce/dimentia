@@ -1,7 +1,7 @@
-#include "../include/Weapon.hpp"
-#include "../include/Enemy.hpp"
-#include "../include/Globals.hpp"
-#include "../include/Player.hpp"
+#include "Weapon.hpp"
+#include "Enemy.hpp"
+#include "Globals.hpp"
+#include "Player.hpp"
 #include "raymath.h"
 #include <raylib.h>
 

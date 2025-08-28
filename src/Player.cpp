@@ -1,8 +1,8 @@
-#include "../include/Player.hpp"
-#include "../include/AnimationManager.hpp"
-#include "../include/Enemy.hpp"
-#include "../include/Globals.hpp"
-#include "../include/Weapon.hpp"
+#include "Player.hpp"
+#include "AnimationManager.hpp"
+#include "Enemy.hpp"
+#include "Globals.hpp"
+#include "Weapon.hpp"
 #include <algorithm>
 #include <raylib.h>
 #include <raymath.h>

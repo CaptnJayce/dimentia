@@ -1,7 +1,7 @@
-#include "../include/GUI.hpp"
-#include "../include/Enemy.hpp"
-#include "../include/Entity.hpp"
-#include "../include/Globals.hpp"
+#include "GUI.hpp"
+#include "Enemy.hpp"
+#include "Entity.hpp"
+#include "Globals.hpp"
 
 #define RAYGUI_IMPLEMENTATION // fuck you
 #include "../../raygui.h"
